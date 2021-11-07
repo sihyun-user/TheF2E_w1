@@ -1,0 +1,22 @@
+.scene {
+  .banner {
+    width: 100%;
+    position: relative;
+
+    & img {
+      height: 570px;
+      object-fit: cover;
+      display: block;
+    }
+
+    & h1 {
+      font-size: 48px;
+      font-weight: $bold;
+      color: $color-white;
+      position: absolute;
+      right: 50%;
+      top: 50%;
+      transform: translate3d(50%, -50%, 0);
+    }
+  }
+}

@@ -7,6 +7,10 @@
     text-align: center;
     font-weight: $regular;
     margin: 105px 0;
+
+    @include pad {
+      margin: 70px 0;
+    }
   }
   
   .main {
@@ -16,13 +20,21 @@
     display: flex;
     justify-content: space-around;
 
+    @include pad {
+      margin-bottom: 70px;
+    }
+
+    & a:nth-child(2) {
+      margin: 0 70px;
+
+      @include pad {
+        margin: 0 20px;
+      }
+    }
+
     &__wrap {
       cursor: pointer;
       position: relative;
-
-      &:nth-child(2) {
-        margin: 0 70px;
-      }
 
       &::after {
         content: '';
@@ -85,6 +97,11 @@
       height: 500px;
       display: block;
       border-radius: 10px;
+
+      @include pad {
+        width: 420px;
+        height: 300px;
+      }
     }
   }
 }

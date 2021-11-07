@@ -1,0 +1,100 @@
+.search {
+  .banner {
+    width: 100%;
+    position: relative;
+
+    & img {
+      height: 570px;
+      object-fit: cover;
+      display: block;
+    }
+
+    &__mask {
+      width: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    & h1 {
+      font-size: 48px;
+      font-weight: $bold;
+      color: $color-white;
+      position: absolute;
+      right: 50%;
+      top: 20%;
+      transform: translatex(50%);
+    }
+  }
+
+  .form {
+    width: 950px;
+    max-width: 100%;
+    position: absolute;
+    right: 50%;
+    top: 35%;
+    transform: translatex(50%);
+
+    display: flex;
+    justify-content: space-between;
+
+    &__btn {
+      display: flex;
+      margin-left: 10px;
+
+      & .btn {
+        font-size: 16px;
+        font-weight: $bold;
+        width: 90px;
+        height: 44px;
+        border-radius: 10px;
+        margin: 0 5px;
+        cursor: pointer;
+
+        &--2 {
+          color: $color-white;
+          background-color: $color-orange;
+        }
+
+        &--3 {
+          color: $color-orange;
+          border: 1px solid $color-orange;
+        }
+      }
+    }
+    
+  }
+
+  .main {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    // border: 1px solid red;
+    &__title {
+      font-size: 24px;
+      font-weight: $bold;
+      margin-bottom: 15px;
+
+      &::before {
+        content: '|';
+        color: transparent;
+        display: inline-block;
+        width: 6px;
+        border-radius: 10px;
+        margin-right: 5px;
+      }
+
+      &--1::before {
+        background-color: $color-purple;
+      }
+
+      &--2::before {
+        background-color: $color-orange;
+      }
+
+      &--3::before {
+        background-color: $color-green;
+      }
+    }
+  }
+}
