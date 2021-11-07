@@ -9,3 +9,73 @@
     border-radius: 10px;
   }
 }
+
+.card {
+  width: 280px;
+  height: 300px;
+  border-radius: 5px;
+  background-color: $color-white;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+
+  &:hover > &__pic img {
+    transform:scale(1.2);
+  }
+  
+  &__pic {
+    overflow: hidden;
+
+    & img {
+      height: 200px;
+      display: block;
+      transition: all 1s ease-out;
+    }
+  }
+
+  &__heart {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+
+    & i {
+      font-size: 24px;
+      color: $color-white;
+    }
+  }
+
+  &__content {
+    height: 100px;
+    padding: 8px 8px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &__title {
+    & h2 {
+      font-size: 18px;
+      font-weight: $bold;
+      margin-bottom: 4px;
+    }
+
+    & > span {
+      font-size: 14px;
+      font-weight: $regular;
+      color: $color-green;
+    }
+  }
+
+  &__address {
+    display: flex;
+    
+    & i {
+      margin-right: 5px;
+    }
+
+    & p {
+      font-size: 14px;
+      font-weight: $regular;
+    }
+  }
+}

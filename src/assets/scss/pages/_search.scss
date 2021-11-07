@@ -69,7 +69,12 @@
     max-width: 1200px;
     width: 100%;
     margin: 0 auto;
-    // border: 1px solid red;
+    margin-bottom: 200px;
+
+    &__wrap {
+      margin-bottom: 100px;
+    }
+
     &__title {
       font-size: 24px;
       font-weight: $bold;
@@ -94,6 +99,21 @@
 
       &--3::before {
         background-color: $color-green;
+      }
+    }
+
+    &__cards {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+
+      & li {
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+        margin-bottom: 30px;
+
+        &:hover {
+          box-shadow: 0px 0px 10px rgba(210, 61, 255, 0.5);
+        }
       }
     }
   }
