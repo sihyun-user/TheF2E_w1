@@ -1,0 +1,32 @@
+$color-primary: #212941;
+$color-secondary: #d72c1d;
+$color-white: #fff;
+$color-black: #000;
+
+$light: 300;
+$regular: 400;
+$medium: 500;
+$bold: 700;
+$black: 900;
+
+$mobile: 767px; // <768px
+$pad: 1023px; // ≥768px
+$desktop: 1280px; // ≥1024px
+
+@mixin mobile {
+  @media (max-width: $mobile) {
+    @content;
+  }
+}
+
+@mixin pad {
+  @media (max-width: $pad) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (max-width: $desktop) {
+    @content;
+  }
+}

@@ -1,0 +1,20 @@
+footer {
+  font-size: 14px;
+  color: $color-white;
+  width: 100%;
+  background-color: #212941;
+  text-align: center;
+
+  .container {
+    padding: 20px 0 15PX;
+  }
+
+  & p {
+    &:nth-child(1) {
+      margin-bottom: 5px;
+    }
+    &:nth-child(2) {
+      margin-bottom: 20px;
+    }
+  }
+}
