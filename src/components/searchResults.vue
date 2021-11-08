@@ -3,7 +3,12 @@
     <div class="results__content">
       <div class="results__block"></div>
       <div class="results__cardBox">
-        <h2 class="results__title results__title--1">熱門景點</h2>
+        <div class="results__titleBox">
+          <h2 v-if="selectedType === '觀光'" class="results__title results__title--1">熱門景點</h2>
+          <h2 v-else-if="selectedType === '美食'" class="results__title results__title--2">必吃美食</h2>
+          <h2 v-else class="results__title results__title--3">優質住宿</h2>
+        </div>
+
         <ul class="results__marks">
           <li>夜市</li>
           <li>中壢區</li>
@@ -20,16 +25,32 @@
           >
           </card-item>
         </ul>
+  
+        <p v-if="selected.length == 0" class="results__error">沒有搜尋到任何東西，請再重新搜尋</p>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { ref, toRefs, watch } from 'vue'
 import CardItem from '../components/CardItem.vue'
 export default {
-  props: ['selected'],
+  props: ['selected', 'type'],
   components: {
-    CardItem
+    CardItem,
+  },
+  setup(props) {
+    const { selected, type } = toRefs(props)
+    const selectedType = ref('美食')
+
+
+    watch(selected, () => {
+      selectedType.value = type.value
+    })
+
+    return {
+      selectedType
+    }
   }
 }
 </script>

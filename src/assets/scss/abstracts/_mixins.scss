@@ -36,6 +36,12 @@ $desktop: 1280px; // ≥1024px
   }
 }
 
+@mixin ipadPro {
+  @media (min-height: 1194px) {
+    @content;
+  }
+}
+
 @mixin desktop {
   @media (max-width: $desktop) {
     @content;
