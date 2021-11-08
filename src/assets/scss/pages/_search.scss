@@ -1,5 +1,5 @@
 .search {
-  .banner {
+  & .banner {
     width: 100%;
     position: relative;
 
@@ -27,7 +27,7 @@
     }
   }
 
-  .form {
+  & .form {
     width: 950px;
     max-width: 100%;
     position: absolute;
@@ -95,7 +95,7 @@
     
   }
 
-  .main {
+  & .main {
     padding: 0 18px;
 
     &__container {
