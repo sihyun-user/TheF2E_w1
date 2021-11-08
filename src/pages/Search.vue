@@ -73,12 +73,48 @@
     </div>
 
     <search-results v-else :selected="finalSearch" :type="selectedType"></search-results>
+
+    <div class="popup">
+      <div class="popup__content">
+        <div class="popup__type popup__wrap">
+          <h2 class="popup__title">類別</h2>
+          <ul class="popup__items">
+            <li>美食</li>
+            <li>住宿</li>
+            <li>觀光</li>
+          </ul>
+        </div>
+        <div class="popup__hot popup__wrap">
+          <h2 class="popup__title">熱門分類</h2>
+          <ul class="popup__items">
+            <li>牛肉麵</li>
+            <li>海鮮餐廳</li>
+          </ul>
+        </div>
+        <div class="popup__city popup__wrap">
+          <h2 class="popup__title">城市</h2>
+          <ul class="popup__items">
+            <li v-for="city in cityData" :key="city.id">
+              {{ city.name }}
+            </li>
+          </ul>
+        </div>
+        <div class="popup__btns">
+          <button class="popup__btns--clear">清除全部</button>
+          <button class="popup__btns--search">查詢</button>
+        </div>
+        <i class="popup__close fas fa-times"></i>
+      </div>
+    </div>
+
   </section>
+  <div class="mask"></div>
 </template>
 
 <script>
 import { ref, computed } from 'vue'
 import { useStore } from 'vuex';
+import CITY_DATA from '../city-data.js'
 import CardItem from '../components/CardItem.vue'
 import searchResults from '../components/searchResults.vue'
 export default {
@@ -88,6 +124,7 @@ export default {
   },
   setup() {
     const store = useStore()
+    const cityData = CITY_DATA
     const selectedType = ref('美食')
     const isSearch = ref(false)
     const finalSearch = ref(null)
@@ -156,6 +193,7 @@ export default {
     
 
     return {
+      cityData,
       selectedType,
       isSearch,
       finalSearch,
