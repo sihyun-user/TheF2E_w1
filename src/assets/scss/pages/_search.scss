@@ -34,42 +34,75 @@
     right: 50%;
     top: 35%;
     transform: translatex(50%);
-
     display: flex;
     justify-content: space-between;
 
-    &__btn {
+    @include mobile {
+      display: none;
+    }
+
+    &__menu {
       display: flex;
       margin-left: 10px;
+    }
 
-      & .btn {
+    &__select {
+      position: relative;
+
+      & select {
         font-size: 16px;
+        color: $color-primary;
         font-weight: $bold;
         width: 90px;
         height: 44px;
         border-radius: 10px;
         margin: 0 5px;
-        cursor: pointer;
+        border: 0;
+        outline: none;
+        padding: 0 5px 0 15px;
+        background-color: $color-white;
+      }
+      &::after {
+        content: "\f078";
+        font-weight: 900;
+        font-family: 'Font Awesome 5 Free';
+        pointer-events: none;
+        position: absolute;
+        right: 18px;
+        top: 13px;
+      }
+    }
 
-        &--2 {
-          color: $color-white;
-          background-color: $color-orange;
-        }
+    &__btn {
+      font-size: 16px;
+      font-weight: $bold;
+      width: 90px;
+      height: 44px;
+      border-radius: 10px;
+      margin: 0 5px;
+      cursor: pointer;
 
-        &--3 {
-          color: $color-orange;
-          border: 1px solid $color-orange;
-        }
+      &--1 {
+        color: $color-white;
+        background-color: $color-orange;
+      }
+
+      &--2 {
+        color: $color-orange;
+        border: 1px solid $color-orange;
       }
     }
     
   }
 
   .main {
-    max-width: 1200px;
-    width: 100%;
-    margin: 0 auto;
-    margin-bottom: 200px;
+    padding: 0 18px;
+
+    &__container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
 
     &__wrap {
       margin-bottom: 100px;
@@ -103,17 +136,12 @@
     }
 
     &__cards {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-gap: 25px;
 
       & li {
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
-        margin-bottom: 30px;
-
-        &:hover {
-          box-shadow: 0px 0px 10px rgba(210, 61, 255, 0.5);
-        }
+        width: 100%;
       }
     }
   }

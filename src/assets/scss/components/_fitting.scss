@@ -13,11 +13,17 @@
 .card {
   width: 280px;
   height: 300px;
-  border-radius: 5px;
   background-color: $color-white;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
   position: relative;
+
+  &:hover {
+    box-shadow: 0px 0px 10px rgba(210, 61, 255, 0.5);
+  }
+
 
   &:hover > &__pic img {
     transform:scale(1.2);
@@ -29,6 +35,7 @@
     & img {
       height: 200px;
       display: block;
+      object-fit: cover;
       transition: all 1s ease-out;
     }
   }
@@ -53,10 +60,15 @@
   }
 
   &__title {
+    
     & h2 {
       font-size: 18px;
       font-weight: $bold;
-      margin-bottom: 4px;
+      margin-bottom: 7px;
+
+      overflow:hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     & > span {
@@ -66,10 +78,22 @@
     }
   }
 
+  &__phone {
+    color: $color-green;
+    font-weight: $regular;
+
+    & i {
+      font-size: 14px;
+      margin-right: 5px;
+    }
+  }
+
   &__address {
     display: flex;
+    align-items: flex-start;
     
     & i {
+      color: $color-orange;
       margin-right: 5px;
     }
 
