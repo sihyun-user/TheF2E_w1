@@ -36,8 +36,6 @@ const store = createStore({
 
       const responseData = await response.json()
 
-      console.log(responseData)
-
       context.commit('setScenicSpot', responseData)
     },
     async setRestaurant(context, {val, city}) {

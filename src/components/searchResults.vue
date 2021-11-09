@@ -57,6 +57,32 @@
         >
         {{ num }}</li>
       </ul>
+      <ul class="results__pages--other">
+        <li 
+        v-for="num in 3" 
+        :key="num" 
+        :class="{ curPageStyle: num == curPage }"
+        @click="changePage(num)" 
+        >
+        {{ num }}
+        </li>
+        <li>...</li>
+        <li 
+        v-for="(num, index) in 3" 
+        :key="num" 
+        :class="{ curPageStyle: num == curPage }"
+        @click="changePage(num)" 
+        >
+        {{ num }} - {{ index }}
+        </li> 
+        <!-- <li
+        :class="{ curPageStyle: num == curPage }"
+        @click="changePage(numPages - 2)">
+        {{ numPages - 2 }}
+        </li>
+        <li @click="changePage(numPages - 1)">{{ numPages - 1 }}</li>
+        <li @click="changePage(numPages)">{{ numPages }}</li> -->
+      </ul>
 
       <div class="results__pages-btn results__pages-next">
         <button class="results__pages-btn--gray" v-if="curPage == numPages">
@@ -117,6 +143,7 @@ export default {
 
     watch(selected, () => {
       selectedType.value = type.value
+      setPageResults(1)
     })
 
     watch(curPage, () => setPageResults(curPage.value))
