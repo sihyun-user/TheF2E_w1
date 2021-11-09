@@ -4,8 +4,8 @@
       <div class="results__block"></div>
       <div class="results__cardBox">
         <div class="results__titleBox">
-          <h2 v-if="selectedType === '觀光'" class="results__title results__title--1">熱門景點</h2>
-          <h2 v-else-if="selectedType === '美食'" class="results__title results__title--2">必吃美食</h2>
+          <h2 v-if="selectedType === 'scenicSpot'" class="results__title results__title--1">熱門景點</h2>
+          <h2 v-else-if="selectedType === 'restaurant'" class="results__title results__title--2">必吃美食</h2>
           <h2 v-else class="results__title results__title--3">優質住宿</h2>
         </div>
 
@@ -41,8 +41,7 @@ export default {
   },
   setup(props) {
     const { selected, type } = toRefs(props)
-    const selectedType = ref('美食')
-
+    const selectedType = ref('restaurant')
 
     watch(selected, () => {
       selectedType.value = type.value

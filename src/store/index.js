@@ -1,5 +1,5 @@
 import { createStore } from "vuex"
-import { API_URL, FILTER_PIC } from "../config.js"
+import { API_URL, FILTER_PIC, RES_PER_PAGE } from "../config.js"
 import getAuthorizationHeader from '../helpers.js'
 
 const store = createStore({
@@ -7,7 +7,9 @@ const store = createStore({
     return {
       scenicSpot: [],
       restaurant: [],
-      hotel: []
+      hotel: [],
+      results: [],
+      resultsPerPage: RES_PER_PAGE,
     }
   },
   mutations: {
@@ -19,11 +21,16 @@ const store = createStore({
     },
     setHotel(state, payload) {
       state.hotel = payload
+    },
+    setPageResults(state, payload) {
+      state.results = payload
     }
   },
   actions: {
-    async setScenicSpot(context, val) { 
-      const API = val ? `${API_URL}/v2/Tourism/ScenicSpot?$top=${val}&${FILTER_PIC}&$format=JSON` : `${API_URL}/v2/Tourism/ScenicSpot&${FILTER_PIC}`
+    async setScenicSpot(context, {val, city}) { 
+      const API = val ? `${API_URL}/v2/Tourism/ScenicSpot?$top=${val}&$format=JSON&${FILTER_PIC}`  
+      : ( city ? `${API_URL}/v2/Tourism/ScenicSpot/${city}?$format=JSON&${FILTER_PIC}` : `${API_URL}/v2/Tourism/ScenicSpot?$format=JSON&${FILTER_PIC}`)
+
       const response = await fetch(API, {
         headers: getAuthorizationHeader()
       })
@@ -38,8 +45,10 @@ const store = createStore({
 
       context.commit('setScenicSpot', responseData)
     },
-    async setRestaurant(context, val) {
-      const API = val ? `${API_URL}/v2/Tourism/Restaurant?$top=${val}&${FILTER_PIC}&$format=JSON` : `${API_URL}/v2/Tourism/Restaurant&${FILTER_PIC}`
+    async setRestaurant(context, {val, city}) {
+      const API = val ? `${API_URL}/v2/Tourism/Restaurant?$top=${val}&$format=JSON&${FILTER_PIC}`  
+      : ( city ? `${API_URL}/v2/Tourism/Restaurant/${city}?$format=JSON&${FILTER_PIC}` : `${API_URL}/v2/Tourism/Restaurant?$format=JSON&${FILTER_PIC}`)
+      
       const response = await fetch(API, {
         headers: getAuthorizationHeader()
       })
@@ -52,8 +61,9 @@ const store = createStore({
 
       context.commit('setRestaurant', responseData)
     },
-    async setHotel(context, val) {
-      const API = val ? `${API_URL}/v2/Tourism/Hotel?$top=${val}&${FILTER_PIC}&$format=JSON` : `${API_URL}/v2/Tourism/Hotel&${FILTER_PIC}`
+    async setHotel(context, {val, city}) {
+      const API = val ? `${API_URL}/v2/Tourism/Hotel?$top=${val}&$format=JSON&${FILTER_PIC}`  
+      : ( city ? `${API_URL}/v2/Tourism/Hotel/${city}?$format=JSON&${FILTER_PIC}` : `${API_URL}/v2/Tourism/Hotel?$format=JSON&${FILTER_PIC}`)
       const response = await fetch(API, {
         headers: getAuthorizationHeader()
       })
@@ -66,6 +76,17 @@ const store = createStore({
       const responseData = await response.json()
 
       context.commit('setHotel', responseData)
+    },
+    setPageResults(context, data , page) {
+      const resultsPerPage = context.state.resultsPerPage
+
+      // page(1)抓取 0 - 7 的陣列項目 | page(2)抓取 8 - 15 的陣列項目
+      const start = (page -1) * resultsPerPage // 0
+      const end = page * resultsPerPage // 7
+      
+      const filterData = data.slice(start, end)
+      
+      context.commit('setPageResults', filterData)
     }
   },
   getters: {
@@ -77,6 +98,9 @@ const store = createStore({
     },
     hotel(state) {
       return state.hotel
+    },
+    results(state) {
+      return state.results
     }
   }
 })
