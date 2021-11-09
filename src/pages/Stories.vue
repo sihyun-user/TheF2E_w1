@@ -168,7 +168,6 @@ export default {
       await goSearch(20)
       selectedCity.value = null
       enteredSearchTerm.value = ''
-      console.log(restaurant.value)
     }
 
     function updatedFilters(val) {

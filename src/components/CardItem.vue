@@ -9,7 +9,6 @@
       </div>
       <div class="card__content">
         <div class="card__title">
-          <p>ID:{{ id }}</p>
           <h2>{{ name }}</h2>
           <div class="card__phone" v-if="phone">
             <i class="fas fa-phone-alt"></i>

@@ -18,10 +18,12 @@
           <card-item
           v-for="select in pageResults"
           :key="select.ID"
+          :id="select.ID"
           :name="select.Name"
           :address="select.Address"
           :phone="select.Phone"
           :picture="select.Picture.PictureUrl1"
+          :type="type"
           >
           </card-item>
         </ul>
