@@ -1,6 +1,10 @@
 <template>
   <div v-show="show" class="filter">
     <div class="filter__content">
+      <div class="filter__keyword">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="請輸入關鍵字" v-model="keyword"/>
+      </div>
       <div class="filter__type filter__wrap">
         <h2 class="filter__title">類別</h2>
         <div class="filter__items">
@@ -49,19 +53,22 @@ export default {
     const filterType = ref('restaurant')
     const filterHot = ref([])
     const filterCity = ref('')
+    const keyword = ref('')
     const show = ref(true)
 
     function claerFilter() {
       filterType.value = 'restaurant'
       filterHot.value = []
       filterCity.value = ''
+      keyword.value = ''
     }
 
     function submitFilter() {
       const updatedFilters = {
         type: filterType.value,
         hot: filterHot.value,
-        city: filterCity.value
+        city: filterCity.value,
+        keyword: keyword.value
       }
 
       context.emit('update-filter', updatedFilters)
@@ -78,6 +85,7 @@ export default {
       filterType,
       filterHot,
       filterCity,
+      keyword,
       show,
       claerFilter,
       submitFilter,

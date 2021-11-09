@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import { useStore } from 'vuex';
 import CardItem from '../components/CardItem.vue'
 import searchResults from '../components/searchResults.vue'
@@ -157,7 +157,7 @@ export default {
     }
 
     async function submitForm() {
-      await goSearch(50)
+      await goSearch(20)
       selectedCity.value = null
       enteredSearchTerm.value = ''
     }
@@ -165,11 +165,9 @@ export default {
     function updatedFilters(val) {
       selectedType.value = val.type
       selectedCity.value = val.city
+      enteredSearchTerm.value = val.keyword
+      submitForm()
     }
-
-    watch(selectedCity, () =>{
-      goSearch()
-    })
 
     function handleShow() {
       show.value = true
