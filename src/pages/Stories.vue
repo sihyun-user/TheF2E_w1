@@ -33,10 +33,12 @@
           <card-item
           v-for="spot in scenicSpot"
           :key="spot.ID"
+          :id="spot.ID"
           :name="spot.Name"
           :address="spot.Address"
           :phone="spot.Phone"
           :picture="spot.Picture.PictureUrl1"
+          type="scenicSpot"
           >
           </card-item>
         </ul>
@@ -48,10 +50,12 @@
             <card-item
             v-for="res in restaurant"
             :key="res.ID"
+            :id="res.ID"
             :name="res.Name"
             :address="res.Address"
             :phone="res.Phone"
             :picture="res.Picture.PictureUrl1"
+            type="restaurant"
             >
             </card-item> 
           </ul>
@@ -63,17 +67,18 @@
             <card-item
             v-for="hot in hotel"
             :key="hot.ID"
+            :id="hot.ID"
             :name="hot.Name"
             :address="hot.Address"
             :phone="hot.Phone"
             :picture="hot.Picture.PictureUrl1"
+            type="hotel"
             >
             </card-item>
           </ul>
         </div>
       </div>
     </div>
-
 
     <search-results v-else :selected="finalSearch" :type="selectedType"></search-results>
 
@@ -163,6 +168,7 @@ export default {
       await goSearch(20)
       selectedCity.value = null
       enteredSearchTerm.value = ''
+      console.log(restaurant.value)
     }
 
     function updatedFilters(val) {

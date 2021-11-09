@@ -52,6 +52,8 @@ const store = createStore({
 
       const responseData = await response.json()
 
+      // console.log(responseData)
+
       context.commit('setRestaurant', responseData)
     },
     async setHotel(context, {val, city}) {
