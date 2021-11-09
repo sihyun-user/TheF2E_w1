@@ -2,7 +2,9 @@
   <section class="search">
     <div class="banner">
       <img src="@/assets/img/scene.jpg" alt="banner">
-      <img class="banner__mask" src="@/assets/img/bannerMask.png" alt="banner">
+      <div class="banner__mask">
+        <img src="@/assets/img/bannerMask.png">
+      </div>
       <h1>搜尋台灣</h1> 
 
       <form @submit.prevent="submitForm" class="form">

@@ -13,6 +13,7 @@ const router = createRouter({
     { path: '/scene', component: Attractions },
     { path: '/search', component: Search },
     { path: '/story', component: Story },
+    { path: '/:notFound(.*)', redirect: '/home' },
   ]
 })
 

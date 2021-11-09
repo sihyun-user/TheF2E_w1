@@ -1,1 +1,202 @@
-.story {}
+.story {
+  &__container {
+    width: 1200px;
+    max-width: 100%;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  &__title {
+    font-size: 36px;
+    color: $color-white;
+    font-weight: $bold;
+    line-height: 1.2;
+    position: absolute;
+    left: 20px;
+    top: 30px;
+
+    @include mobile {
+      font-size: 24px;
+      top: 12px;
+    }
+
+    &::before {
+      content: '|';
+      color: transparent;
+      display: inline-block;
+      width: 6px;
+      background-color: $color-orange;
+      border-radius: 10px;
+      margin-right: 5px;
+    }
+
+  }
+
+  &__imgs {
+    margin-bottom: 35px;
+
+    @include mobile {
+      margin-bottom: 15px;
+    }
+
+    & img {
+      height: 500px;
+      display: block;
+      object-fit: cover;
+
+      @include mobile {
+        height: 200px;
+      }
+    }
+  }
+
+  &__content {
+    padding: 0 18px;
+    display: flex;
+    justify-content: space-between;
+
+    @include pad {
+      flex-direction: column;
+    }
+  }
+
+  &__info {
+    width: 780px;
+    max-width: 100%;
+
+    & h2 {
+      font-size: 24px;
+      font-weight: $bold;
+      color: $color-orange;
+      margin-bottom: 12px;
+    } 
+
+    &--description {
+      padding-bottom: 30px;
+      margin-bottom: 25px;
+      border-bottom: 1px solid #C4C4C4;
+
+      & p {
+        font-size: 18px;
+        line-height: 1.6;
+        font-weight: $regular;
+      }
+    }
+
+    &--details {
+      padding-bottom: 30px;
+      margin-bottom: 25px;
+      border-bottom: 1px solid #C4C4C4;
+
+      & > div:not(:last-child) {
+        margin-bottom: 20px;
+      }
+
+      & i {
+        font-size: 20px;
+        color: $color-orange;
+        margin-right: 5px;
+      }
+      
+      & span {
+        font-size: 18px;
+        font-weight: $regular;
+        line-height: 1.6;
+      }
+    }
+
+    &--keyword {
+      
+      @include pad {
+        padding-bottom: 30px;
+        margin-bottom: 25px;
+        border-bottom: 1px solid #C4C4C4;
+      }
+
+      & button {
+        width: 110px;
+        padding: 6px 0;
+        border: 1px solid #AEAEAE;
+        border-radius: 100px;
+        margin-right: 12px;
+        cursor: pointer;
+
+        &:hover {
+          color: $color-white;
+          background-color: $color-orange;
+          border: 1px solid transparent;
+        }
+      }
+    }
+  }
+
+  &__side {
+
+    &--map {
+      padding-bottom: 30px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid #C4C4C4;
+
+      & img {
+        height: 240px;
+        display: block;
+
+        @include pad {
+          height: 300px;
+        }
+
+        @include mobile {
+          height: 200px;
+        }
+      }
+    }
+
+    &--hot {
+      margin-bottom: 40px;
+
+      & li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      & h2 {
+        font-size: 24px;
+        font-weight: $bold;
+        margin-bottom: 20px;
+
+        &::before {
+          content: '|';
+          color: transparent;
+          display: inline-block;
+          width: 6px;
+          background-color: $color-orange;
+          border-radius: 10px;
+          margin-right: 5px;
+        }
+      }
+
+      & h3 {
+        font-size: 18px;
+        line-height: 1.6;
+        font-weight: $regular;
+        margin-left: 25px;
+        cursor: pointer;
+      }
+
+      & img {
+        width: 210px;
+        max-width: 100%;
+        height: 85px;
+        object-fit: cover;
+        display: block;
+        border-radius: 5px;
+        cursor: pointer;
+
+        @include mobile {
+          width: 165px;
+        }
+      }
+    }
+  }
+}
