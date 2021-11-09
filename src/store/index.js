@@ -1,5 +1,5 @@
 import { createStore } from "vuex"
-import { API_URL, FILTER_PIC, RES_PER_PAGE } from "../config.js"
+import { API_URL, FILTER_PIC } from "../config.js"
 import getAuthorizationHeader from '../helpers.js'
 
 const store = createStore({
@@ -7,9 +7,7 @@ const store = createStore({
     return {
       scenicSpot: [],
       restaurant: [],
-      hotel: [],
-      results: [],
-      resultsPerPage: RES_PER_PAGE,
+      hotel: []
     }
   },
   mutations: {
@@ -21,9 +19,6 @@ const store = createStore({
     },
     setHotel(state, payload) {
       state.hotel = payload
-    },
-    setPageResults(state, payload) {
-      state.results = payload
     }
   },
   actions: {
@@ -76,17 +71,6 @@ const store = createStore({
       const responseData = await response.json()
 
       context.commit('setHotel', responseData)
-    },
-    setPageResults(context, data , page) {
-      const resultsPerPage = context.state.resultsPerPage
-
-      // page(1)抓取 0 - 7 的陣列項目 | page(2)抓取 8 - 15 的陣列項目
-      const start = (page -1) * resultsPerPage // 0
-      const end = page * resultsPerPage // 7
-      
-      const filterData = data.slice(start, end)
-      
-      context.commit('setPageResults', filterData)
     }
   },
   getters: {
@@ -98,9 +82,6 @@ const store = createStore({
     },
     hotel(state) {
       return state.hotel
-    },
-    results(state) {
-      return state.results
     }
   }
 })

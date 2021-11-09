@@ -16,7 +16,7 @@
 
         <ul class="results__cards">
           <card-item
-          v-for="select in selected"
+          v-for="select in pageResults"
           :key="select.ID"
           :name="select.Name"
           :address="select.Address"
@@ -29,10 +29,59 @@
         <p v-if="selected.length == 0" class="results__error">沒有搜尋到任何東西，請再重新搜尋</p>
       </div>
     </div>
+    <div class="results__pages">
+      <div class="results__pages-btn results__pages-lastOff">
+        <button class="results__pages-btn--gray" v-if="curPage == 1">
+          <i class="fas fa-angle-double-left"></i>
+        </button>
+        <button @click="changePage(1)" v-else>
+          <i class="fas fa-angle-double-left"></i>
+        </button>
+      </div>
+
+      <div class="results__pages-btn results__pages-last">
+        <button class="results__pages-btn--gray" v-if="curPage == 1">
+          <i class="fas fa-angle-left"></i>
+        </button>
+        <button @click="goto(-1)" v-else>
+          <i class="fas fa-angle-left"></i>
+        </button>
+      </div>
+      
+      <ul class="results__pages--other">
+        <li 
+        v-for="(num, index) in numPages" 
+        :key="index" 
+        :class="{ curPageStyle: num == curPage }"
+        @click="changePage(num)"
+        >
+        {{ num }}</li>
+      </ul>
+
+      <div class="results__pages-btn results__pages-next">
+        <button class="results__pages-btn--gray" v-if="curPage == numPages">
+          <i class="fas fa-angle-right"></i>
+        </button>
+        <button @click="goto(1)" v-else>
+          <i class="fas fa-angle-right"></i>
+        </button>
+      </div>
+
+      <div class="results__pages-btn results__pages-nextOff">
+        <button class="results__pages-btn--gray" v-if="curPage == numPages">
+          <i class="fas fa-angle-double-right"></i>
+        </button>
+        <button @click="changePage(numPages)" v-else>
+          <i class="fas fa-angle-double-right"></i>
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import { ref, toRefs, watch } from 'vue'
+import { computed, ref, toRefs, watch } from 'vue'
+// import { createStore } from 'vuex'
+import { RES_PER_PAGE } from "../config.js"
 import CardItem from '../components/CardItem.vue'
 export default {
   props: ['selected', 'type'],
@@ -40,15 +89,47 @@ export default {
     CardItem,
   },
   setup(props) {
+    // const store = createStore() 
+    const resultsPerPage = RES_PER_PAGE
     const { selected, type } = toRefs(props)
     const selectedType = ref('restaurant')
+    const curPage = ref(1)
+    const pageResults = ref(null)
+
+    const numPages = computed(() => Math.ceil(selected.value.length / resultsPerPage))
+    // const pageResults = computed(() => store.dispatch('setPageResults'))
+
+    function goto(val) {
+      curPage.value += val
+    }
+
+    function changePage(val) {
+      curPage.value = val
+    }
+
+    function setPageResults(page) {
+      // page(1)抓取 0 - 7 的陣列項目 | page(2)抓取 8 - 15 的陣列項目
+      const start = (page -1) * resultsPerPage // 0
+      const end = page * resultsPerPage // 7
+      
+      pageResults.value= selected.value.slice(start, end)
+    }
 
     watch(selected, () => {
       selectedType.value = type.value
     })
 
+    watch(curPage, () => setPageResults(curPage.value))
+
+    setPageResults(1)
+
     return {
-      selectedType
+      selectedType,
+      curPage,
+      numPages,
+      pageResults,
+      goto,
+      changePage
     }
   }
 }

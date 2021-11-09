@@ -157,7 +157,7 @@ export default {
     }
 
     async function submitForm() {
-      await goSearch(8)
+      await goSearch(50)
       selectedCity.value = null
       enteredSearchTerm.value = ''
     }
