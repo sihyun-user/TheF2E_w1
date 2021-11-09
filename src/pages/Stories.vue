@@ -1,5 +1,5 @@
 <template>
-  <section class="search">
+  <section class="stories">
     <div class="banner">
       <img src="@/assets/img/scene.jpg" alt="banner">
       <div class="banner__mask">
@@ -73,6 +73,7 @@
         </div>
       </div>
     </div>
+
 
     <search-results v-else :selected="finalSearch" :type="selectedType"></search-results>
 

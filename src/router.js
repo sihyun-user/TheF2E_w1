@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import Home from './pages/Home.vue'
 import Attractions from './pages/Attractions.vue'
-import Search from './pages/Search.vue'
+import Stories from './pages/Stories.vue'
 import Story from './pages/Story.vue'
 
 const router = createRouter({
@@ -11,8 +11,8 @@ const router = createRouter({
     { path: '/', redirect: '/home' },
     { path: '/home', component: Home },
     { path: '/scene', component: Attractions },
-    { path: '/search', component: Search },
-    { path: '/story', component: Story },
+    { path: '/stories', component: Stories},
+    { path: '/stories/:id', component: Story },
     { path: '/:notFound(.*)', redirect: '/home' },
   ]
 })
