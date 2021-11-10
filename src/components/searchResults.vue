@@ -140,6 +140,13 @@ export default {
 
     watch(curPage, () => setPageResults(curPage.value))
 
+    watch(selectedType , (newVal) => {
+      console.log(newVal)
+      if(newVal == selectedType.value) {
+        curPage.value = 1
+      }
+    })
+
     setPageResults(1)
 
     return {

@@ -24,20 +24,36 @@ header {
     font-size: 18px;
     font-weight: $bold;
     display: flex;
+    align-items: center;
     justify-content: space-between;
     
     &__links {
+      position: relative;
+
       & a {
         width: 150px;
         height: 48px;
         line-height: 48px;
         text-align: center;
         display: inline-block;
-        border-bottom: 4px solid transparent;
+
+        &::after {
+          content: '';
+          display: block;
+          width: 150px;
+          height: 6px;
+          border-radius: 20px;
+          position: absolute;
+          bottom: 0px;
+        }
 
   
         &:hover {
-          border-bottom: 4px solid #FC6532;
+          // border-bottom: 4px solid #FC6532;
+
+          &::after {
+            background-color: $color-orange;
+          }
         }
       }
     }

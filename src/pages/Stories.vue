@@ -8,7 +8,7 @@
       <h1>搜尋台灣</h1> 
 
       <form @submit.prevent="submitForm" class="form">
-        <div class="inputSearch">
+        <div class="form__search">
           <input type="search" @input="enterSearch" :value="enteredSearchTerm" placeholder="請輸入關鍵字" />
         </div>
         <div class="form__menu">

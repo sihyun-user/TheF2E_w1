@@ -5,15 +5,23 @@
       <div class="story__imgs">
         <ul>
           <li v-for="(pic, index) in picture" :key="index" v-show="index == curimg">
+            <button 
+            class="story__imgs-btn story__imgs-btn--prev" 
+            @click="changePicture(-1)" 
+            v-if="curimg !== 0"
+            >
+              <i class="fas fa-chevron-left"></i>
+            </button>
             <img :src="story.Picture[pic]">
+            <button 
+            class="story__imgs-btn story__imgs-btn--next" 
+            @click="changePicture(+1)"
+            v-if="curimg !== picture.length-1"
+            >
+              <i class="fas fa-chevron-right"></i>
+            </button>
           </li>
         </ul>
-        <button class="story__imgs-btn story__imgs-btn--prev" @click="changePicture(-1)">
-          <i class="fas fa-chevron-left"></i>
-        </button>
-        <button class="story__imgs-btn story__imgs-btn--next" @click="changePicture(+1)">
-          <i class="fas fa-chevron-right"></i>
-        </button>
       </div>
     </div>
     <div class="story__container">
@@ -47,14 +55,12 @@
           </div>
           <div class="story__info--keyword">
             <h2>關鍵字標籤</h2>
-            <div v-if="story.Class">
-              <button>{{ story.Class }}</button>
-            </div>
-            <div v-if="story.Class1">
-              <button>{{ story.Class1 }}</button>
-              <button v-if="story.Class2">{{ story.Class2 }}</button>
-              <button v-if="story.Class3">{{ story.Class3 }}</button>
-            </div>
+            <button v-if="story.Class">{{ story.Class }}</button>
+            <ul v-else-if="markClass.length > 0">
+              <li v-for="(mark, index) in markClass" :key="index">
+                <button>{{ story[mark] }}</button>
+              </li>
+            </ul>
             <p v-else>暫無關鍵字標籤</p>
           </div>
         </div>
@@ -130,6 +136,18 @@ export default {
       return imgs
     })
     
+    const markClass = computed(() => {
+      let marks = []
+      for(let i = 1; i < 10; i++) {
+        let mark = `Class${i}`
+        if(story.value[mark] == undefined) {
+          break
+        }
+        marks.push(`Class${i}`)
+      }
+      return marks
+    })
+    
     const position = computed(() => {
       let pos = {
         lat: story.value.Position.PositionLat,
@@ -173,6 +191,7 @@ export default {
     }
 
     function changePicture(num) {
+    
       curimg.value += num
 
       console.log(curimg.value)
@@ -181,8 +200,6 @@ export default {
     function getStoryLink(id) {
       router.push(`/stories/${id}?type=${type.value}`)
     }
-
-    onBeforeRouteUpdate(() => {})
     
     function initMap() {
       map.value = new window.google.maps.Map(mapDivRef.value, {
@@ -201,6 +218,8 @@ export default {
     onMounted(() => {
       initMap(mapDivRef.value)
     })
+
+    onBeforeRouteUpdate(() => {})
     
     return {
       curimg,
@@ -210,6 +229,7 @@ export default {
       popular,
       getStoryLink,
       picture,
+      markClass,
       changePicture
     }
 

@@ -7,7 +7,7 @@
       <ul class="menu">
         <div class="menu__links">
           <router-link to="/">探索台灣</router-link>
-          <router-link to="/">旅遊地圖</router-link>
+          <router-link to="/storymap">旅遊地圖</router-link>
         </div>
         <div class="menu__tools">
           <div class="menu__tools-search">

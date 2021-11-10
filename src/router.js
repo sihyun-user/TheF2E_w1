@@ -4,6 +4,7 @@ import Home from './pages/Home.vue'
 import Attractions from './pages/Attractions.vue'
 import Stories from './pages/Stories.vue'
 import Story from './pages/Story.vue'
+import StoryMap from './pages/StoryMap.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -13,6 +14,7 @@ const router = createRouter({
     { path: '/scene', component: Attractions },
     { path: '/stories', component: Stories},
     { path: '/stories/:storyId', props:true ,component: Story },
+    { path: '/storymap', component: StoryMap },
     { path: '/:notFound(.*)', redirect: '/home' },
   ]
 })

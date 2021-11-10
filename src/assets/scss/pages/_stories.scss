@@ -64,6 +64,18 @@
       display: none;
     }
 
+    &__search {
+      width: 100%;
+    
+      & input {
+        font: inherit;
+        width: 100%;
+        height: 44px;
+        padding: 10px 15px;
+        border-radius: 10px;
+      }
+    }
+
     &__menu {
       display: flex;
       margin-left: 10px;
@@ -176,7 +188,7 @@
     &__content {
       width: 1200px;
       max-width: 100%;
-      height: 55vh;
+      height: 500px;
       margin: 0 auto;
       position: relative;
   
