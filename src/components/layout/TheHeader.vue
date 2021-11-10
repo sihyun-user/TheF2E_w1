@@ -12,7 +12,7 @@
         <div class="menu__tools">
           <div class="menu__tools-search">
             <router-link to="/stories">
-              <i class="fas fa-search" @click="isSearch = !isSearch"></i>
+              <i class="fas fa-search"></i>
             </router-link>
           </div>
           <div class="menu__tools-heart">
@@ -23,14 +23,3 @@
     </nav>
   </header>
 </template>
-
-<script>
-import { ref } from 'vue'
-export default {
-  setup() {
-    const isSearch = ref (false)
-
-    return { isSearch }
-  }
-}
-</script>

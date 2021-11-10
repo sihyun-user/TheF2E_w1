@@ -3,7 +3,17 @@
     <div class="story__banner">
       <h1 class="story__title">{{ story.Name }}</h1>
       <div class="story__imgs">
-        <img :src="story.Picture.PictureUrl1">
+        <ul>
+          <li v-for="(pic, index) in picture" :key="index" v-show="index == curimg">
+            <img :src="story.Picture[pic]">
+          </li>
+        </ul>
+        <button class="story__imgs-btn story__imgs-btn--prev" @click="changePicture(-1)">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="story__imgs-btn story__imgs-btn--next" @click="changePicture(+1)">
+          <i class="fas fa-chevron-right"></i>
+        </button>
       </div>
     </div>
     <div class="story__container">
@@ -85,6 +95,7 @@ export default {
     const map = ref(null)
     const marker = ref(null)
     const mapDivRef = ref(null)
+    const curimg = ref(0)
 
     const scenicSpot = computed(() => store.getters.scenicSpot)
     const restaurant = computed(() => store.getters.restaurant)
@@ -105,6 +116,20 @@ export default {
       return story
     })
 
+    const picture = computed(() => {
+      let imgs = []
+      let storyPic = story.value.Picture
+      for(let i = 1; i < 10; i++) {
+        let picUrl = `PictureUrl${i}`
+
+        if(storyPic[picUrl] == undefined) {
+          break
+        }
+        imgs.push(`PictureUrl${i}`)
+      }
+      return imgs
+    })
+    
     const position = computed(() => {
       let pos = {
         lat: story.value.Position.PositionLat,
@@ -113,7 +138,7 @@ export default {
 
       return pos
     })
-
+    
     const popular = computed(() => {
       let popular = []
       if(type.value == 'restaurant') {
@@ -147,6 +172,12 @@ export default {
       return popular
     }
 
+    function changePicture(num) {
+      curimg.value += num
+
+      console.log(curimg.value)
+    }
+
     function getStoryLink(id) {
       router.push(`/stories/${id}?type=${type.value}`)
     }
@@ -172,11 +203,14 @@ export default {
     })
     
     return {
+      curimg,
       mapDivRef,
       story,
       type,
       popular,
-      getStoryLink
+      getStoryLink,
+      picture,
+      changePicture
     }
 
   }
