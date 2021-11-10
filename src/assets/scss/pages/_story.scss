@@ -127,6 +127,12 @@
           border: 1px solid transparent;
         }
       }
+
+      & p {
+        font-size: 18px;
+        font-weight: $regular;
+        margin-top: 20px;
+      }
     }
   }
 

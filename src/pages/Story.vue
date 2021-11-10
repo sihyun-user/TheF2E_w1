@@ -8,31 +8,37 @@
       <div class="story__content">
         <div class="story__info">
           <div class="story__info--description">
-            <h2>景點資訊</h2>
-            <p>
-              {{ story.Description }}
-            </p>
+            <h2 v-if="type == 'restaurant'">美食資訊</h2>
+            <h2 v-else-if="type == 'hotel'">觀光資訊</h2>
+            <h2 v-else>景點資訊</h2>
+
+            <p v-if="story.Description">{{ story.Description }}</p>
+            <p v-else>暫無描述資訊</p>
           </div>
           <div class="story__info--details">
             <h2>詳細資訊</h2>
             <div v-if="story.OpenTime">
               <i class="fas fa-clock"></i>
-              <span>{{ story.OpenTime }}</span>
+              <span v-if="story.OpenTime">{{ story.OpenTime }}</span>
+              <span v-else>暫無營業時間資訊</span>
             </div>
             <div>
               <i class="fas fa-phone-alt"></i>
-              <span>{{ story.Phone }}</span>
+              <span v-if="story.Phone">{{ story.Phone }}</span>
+              <span v-else>暫無電話資訊</span>
             </div>
             <div>
               <i class="fas fa-map-marker-alt"></i>
-              <span>{{ story.Address }}</span>
+              <span v-if="story.Address">{{ story.Address }}</span>
+              <span>暫無地址資訊</span>
             </div>
           </div>
           <div class="story__info--keyword">
             <h2>關鍵字標籤</h2>
-            <div>
+            <div v-if="story.Class">
               <button>{{ story.Class }}</button>
             </div>
+            <p v-else>暫無關鍵字標籤</p>
           </div>
         </div>
         <div class="story__side">
@@ -65,14 +71,20 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
 export default {
   props: ['storyId'],
   setup(props) {
     const store = useStore()
+    const route = useRoute()
     const story = computed(() => store.getters.restaurant.find(item => item.ID === props.storyId))
+    const type = computed(() => route.query.type)
+
+    console.log(store.getters.restaurant)
     
     return {
-      story
+      story,
+      type
     }
 
   }

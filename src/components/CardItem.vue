@@ -10,14 +10,16 @@
       <div class="card__content">
         <div class="card__title">
           <h2>{{ name }}</h2>
-          <div class="card__phone" v-if="phone">
+          <div class="card__phone">
             <i class="fas fa-phone-alt"></i>
-            <span>{{ phone }}</span>
+            <span v-if="phone">{{ phone }}</span>
+            <span v-else>暫無電話資訊</span>
           </div>
         </div>
         <div class="card__address">
           <i class="fas fa-map-marker-alt"></i>
-          <p>{{ address }}</p>
+          <p v-if="address">{{ address }}</p>
+          <p v-else>暫無地址資訊</p>
         </div>
       </div>
     </router-link>

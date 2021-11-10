@@ -23,7 +23,7 @@ const store = createStore({
   },
   actions: {
     async setScenicSpot(context, {val, city}) { 
-      const API = val ? `${API_URL}/v2/Tourism/ScenicSpot?$top=${val}&$format=JSON&${FILTER_PIC}`  
+      const API = val && !city ? `${API_URL}/v2/Tourism/ScenicSpot?$top=${val}&$format=JSON&${FILTER_PIC}`  
       : ( city ? `${API_URL}/v2/Tourism/ScenicSpot/${city}?$format=JSON&${FILTER_PIC}` : `${API_URL}/v2/Tourism/ScenicSpot?$format=JSON&${FILTER_PIC}`)
 
       const response = await fetch(API, {
@@ -39,7 +39,7 @@ const store = createStore({
       context.commit('setScenicSpot', responseData)
     },
     async setRestaurant(context, {val, city}) {
-      const API = val ? `${API_URL}/v2/Tourism/Restaurant?$top=${val}&$format=JSON&${FILTER_PIC}`  
+      const API = val && !city ? `${API_URL}/v2/Tourism/Restaurant?$top=${val}&$format=JSON&${FILTER_PIC}`  
       : ( city ? `${API_URL}/v2/Tourism/Restaurant/${city}?$format=JSON&${FILTER_PIC}` : `${API_URL}/v2/Tourism/Restaurant?$format=JSON&${FILTER_PIC}`)
       
       const response = await fetch(API, {
@@ -57,7 +57,7 @@ const store = createStore({
       context.commit('setRestaurant', responseData)
     },
     async setHotel(context, {val, city}) {
-      const API = val ? `${API_URL}/v2/Tourism/Hotel?$top=${val}&$format=JSON&${FILTER_PIC}`  
+      const API = val && !city ? `${API_URL}/v2/Tourism/Hotel?$top=${val}&$format=JSON&${FILTER_PIC}`  
       : ( city ? `${API_URL}/v2/Tourism/Hotel/${city}?$format=JSON&${FILTER_PIC}` : `${API_URL}/v2/Tourism/Hotel?$format=JSON&${FILTER_PIC}`)
       const response = await fetch(API, {
         headers: getAuthorizationHeader()
