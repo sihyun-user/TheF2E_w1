@@ -1,8 +1,10 @@
 import { createStore } from "vuex"
 import { API_URL, FILTER_PIC } from "../config.js"
 import getAuthorizationHeader from '../helpers.js'
+import createPersistedState from "vuex-persistedstate";
 
 const store = createStore({
+  plugins: [createPersistedState()],
   state() {
     return {
       scenicSpot: [],
@@ -35,6 +37,7 @@ const store = createStore({
       }
 
       const responseData = await response.json()
+      console.log(responseData)
 
       context.commit('setScenicSpot', responseData)
     },
