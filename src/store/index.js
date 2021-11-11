@@ -9,7 +9,8 @@ const store = createStore({
     return {
       scenicSpot: [],
       restaurant: [],
-      hotel: []
+      hotel: [],
+      positions: []
     }
   },
   mutations: {
@@ -21,6 +22,9 @@ const store = createStore({
     },
     setHotel(state, payload) {
       state.hotel = payload
+    },
+    setPositions (state, payload) {
+      state.positions = payload
     }
   },
   actions: {
@@ -74,6 +78,28 @@ const store = createStore({
       const responseData = await response.json()
 
       context.commit('setHotel', responseData)
+    },
+    setPositions(context) {
+      const posData = []
+      const data = [
+        ...context.getters.restaurant, 
+        ...context.getters.scenicSpot,
+        ...context.getters.hotel
+      ]
+      data.forEach(el => {
+        const pos = {
+          id: el.ID,
+          name: el.Name,
+          phoen: el.Phone,
+          address: el.Address,
+          picture: el.Picture.PictureUrl1,
+          lat: el.Position.PositionLat, 
+          lng: el.Position.PositionLon,
+        }
+        posData.push(pos)
+      });
+
+      context.commit('setPositions', posData)
     }
   },
   getters: {
@@ -85,6 +111,9 @@ const store = createStore({
     },
     hotel(state) {
       return state.hotel
+    },
+    positions(state) {
+      return state.positions
     }
   }
 })

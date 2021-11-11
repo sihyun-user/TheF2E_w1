@@ -1,10 +1,44 @@
 <template>
   <section class="storymap">
-    <div class="map " ref="mapDivRef"></div>
+    <div class="mapWrap">
+      <div class="map" ref="mapDivRef"></div>
+      <div class="card mapCard" v-if="selectedMark">
+        <div class="card__heart">
+          <i class="far fa-heart"></i>
+        </div>
+        <div class="card__pic">
+          <img :src="selectedMark.picture" alt="card">
+        </div>
+        <div class="card__content">
+          <div class="card__title">
+            <h2>{{ selectedMark.name }}</h2>
+            <div class="card__phone">
+              <i class="fas fa-phone-alt"></i>
+              <span v-if="selectedMark.phone">
+                {{ selectedMark.phone }}
+              </span>
+              <span v-else>暫無電話資訊</span>
+            </div>
+          </div>
+          <div class="card__address">
+            <i class="fas fa-map-marker-alt"></i>
+            <p v-if="selectedMark.address">
+              {{ selectedMark.address }}
+            </p>
+            <p v-else>暫無地址資訊</p>
+          </div>
+          <router-link
+          class="mapCard__btn" 
+          to="">
+            深入了解
+          </router-link>
+        </div>
+      </div>
+    </div>
     <div class="aside">
       <div class="aside__search">
         <form @submit.prevent="submitForm" class="form">
-          <div class="form__location">
+          <div class="form__location" @click="setlocation">
             <img src="@/assets/img/location.png">
           </div>
           <div class="form__search">
@@ -146,11 +180,12 @@
 <script>
 import { ref, computed , watch, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { RES_PER_PAGE } from "../config.js"
+import { RES_MAP_PAGE } from "../config.js"
+import getlocation from '../hooks/map.js';
 export default {
   setup() {
     const store =useStore()
-    const resultsPerPage = RES_PER_PAGE
+    const resultsPerPage = RES_MAP_PAGE
     const enteredSearchTerm = ref('')
     const selectedType = ref('restaurant')
     const searchCards = ref(null)
@@ -160,6 +195,7 @@ export default {
     const map = ref(null)
     const marker = ref(null)
     const mapDivRef = ref(null)
+    const selectedMark = ref(null)
 
     const scenicSpot = computed(() => store.getters.scenicSpot)
     const restaurant = computed(() => store.getters.restaurant)
@@ -218,20 +254,6 @@ export default {
       console.log(story.value)
     }
 
-    function initMap() {
-      map.value = new window.google.maps.Map(mapDivRef.value, {
-        zoom:  16,
-        mapTypeId: 'terrain',
-        center: { lat: 25.0652969, lng: 121.6410026 },
-        disableDefaultUI: false,
-      })
-
-      marker.value = new window.google.maps.Marker({
-        position: { lat: 25.0652969, lng: 121.6410026 },
-        map: map.value
-      })
-    }
-
     /* 抓取頁數開始 */
     const numPages = computed(() => Math.ceil(searchCards.value.length / resultsPerPage))
 
@@ -281,6 +303,47 @@ export default {
 
     getData(20)
 
+    /* 撈取地圖資料開始 */
+    const positions = computed(() => store.getters.positions)
+
+    function initPosition() {
+      store.dispatch('setPositions', searchCards.value)
+    }
+
+    function initMap() {
+      map.value = new window.google.maps.Map(mapDivRef.value, {
+        zoom:  8,
+        mapTypeId: 'terrain',
+        center: { lat: 25.0652969, lng: 121.6410026 },
+        disableDefaultUI: false,
+      })
+
+      positions.value.forEach((el) => {
+        marker.value = new window.google.maps.Marker({
+          position: { lat: el.lat, lng: el.lng },
+          map: map.value
+        })
+
+        marker.value.addListener('click', () => {
+          const selected = positions.value.find((card) => card.id === el.id)
+          selectedMark.value = selected
+          console.log(selectedMark.value)
+        });
+      })
+    }
+
+    const { setPosition } = getlocation()
+
+    function setlocation() {
+      getlocation()
+      console.log(setPosition.value)
+    }
+
+    initPosition()
+
+
+    /* 撈取地圖資料結束 */
+
     onMounted(() => {
       initMap(mapDivRef.value)
     })
@@ -298,7 +361,9 @@ export default {
       goto,
       changePage,
       enterSearch,
-      goSearch
+      goSearch,
+      setlocation,
+      selectedMark
     }
   }
 }

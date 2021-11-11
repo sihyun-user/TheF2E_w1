@@ -16,13 +16,13 @@
 
         <ul class="results__cards">
           <card-item
-          v-for="select in pageResults"
-          :key="select.ID"
-          :id="select.ID"
-          :name="select.Name"
-          :address="select.Address"
-          :phone="select.Phone"
-          :picture="select.Picture.PictureUrl1"
+          v-for="res in pageResults"
+          :key="res.ID"
+          :id="res.ID"
+          :name="res.Name"
+          :address="res.Address"
+          :phone="res.Phone"
+          :picture="res.Picture.PictureUrl1"
           :type="type"
           >
           </card-item>

@@ -1,18 +1,31 @@
-import { ref } from 'vue';
+// export default function getlocation() {
+//   if (navigator.geolocation) {
+//     navigator.geolocation.getCurrentPosition(function(position){
+//       console.log(position)
+//     }, function(){
+//       alert('Could not get ypur position')
+//     })
+//   }
+// }
 
-export default function initMap(mapDivRef) {
-  const map = ref(null)
-  const marker = ref(null)
+import { ref } from 'vue'
 
-  map.value = new window.google.maps.Map(mapDivRef.value, {
-    zoom:  12,
-    mapTypeId: 'terrain',
-    center: { lat: 25.0652969, lng: 121.6410026 },
-    disableDefaultUI: false,
-  });
+export default function getlocation() {
+  const setPosition = ref(null)
 
-  marker.value = new window.google.maps.Marker({
-    position: { lat: 25.0652969, lng: 121.6410026 },
-    map: map.value
-  });
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(success, error)
+  } else {
+    alert('你的裝置不支援地理位置功能。')
+  }
+
+  function error() {
+    alert('無法取得你的地理位置')
+  }
+
+  function success(position) {
+    setPosition.value = position
+  }
+
+  return { setPosition }
 }
