@@ -16,7 +16,14 @@ const router = createRouter({
     { path: '/stories/:storyId', props:true ,component: Story },
     { path: '/storymap', component: StoryMap },
     { path: '/:notFound(.*)', redirect: '/home' },
-  ]
+  ],
+
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    }
+    return { left: 0, top: 0} // vue3
+  }
 })
 
 export default router

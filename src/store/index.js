@@ -79,27 +79,52 @@ const store = createStore({
 
       context.commit('setHotel', responseData)
     },
-    setPositions(context) {
+    async setPositions({getters, commit}) {
       const posData = []
-      const data = [
-        ...context.getters.restaurant, 
-        ...context.getters.scenicSpot,
-        ...context.getters.hotel
-      ]
-      data.forEach(el => {
+      await getters.restaurant.forEach(el => {
         const pos = {
           id: el.ID,
           name: el.Name,
-          phoen: el.Phone,
+          phone: el.Phone,
           address: el.Address,
           picture: el.Picture.PictureUrl1,
           lat: el.Position.PositionLat, 
           lng: el.Position.PositionLon,
+          type: 'restaurant'
+          
         }
         posData.push(pos)
       });
 
-      context.commit('setPositions', posData)
+      await getters.scenicSpot.forEach(el => {
+        const pos = {
+          id: el.ID,
+          name: el.Name,
+          phone: el.Phone,
+          address: el.Address,
+          picture: el.Picture.PictureUrl1,
+          lat: el.Position.PositionLat, 
+          lng: el.Position.PositionLon,
+          type: 'scenicSpot'
+        }
+        posData.push(pos)
+      });
+
+      await getters.hotel.forEach(el => {
+        const pos = {
+          id: el.ID,
+          name: el.Name,
+          phone: el.Phone,
+          address: el.Address,
+          picture: el.Picture.PictureUrl1,
+          lat: el.Position.PositionLat, 
+          lng: el.Position.PositionLon,
+          type: 'hotel'
+        }
+        posData.push(pos)
+      });
+
+      commit('setPositions', posData)
     }
   },
   getters: {

@@ -116,52 +116,35 @@ export default {
       enteredSearchTerm.value = event.target.value
     }
 
-    function availableData(val) {
+    function goSearch() {
       let data = []
 
       if(enteredSearchTerm.value) {
-        if (val === 'scenicSpot') {
+        if (selectedType.value === 'scenicSpot') {
           data = scenicSpot.value.filter((item) => 
             item.Name.indexOf(enteredSearchTerm.value) > -1
           )
-        } else if (val === 'restaurant') {
+        } else if (selectedType.value === 'restaurant') {
           data = restaurant.value.filter((item) => 
             item.Name.indexOf(enteredSearchTerm.value) > -1
           )
-        } else if (val === 'hotel') {
+        } else if (selectedType.value === 'hotel') {
           data = hotel.value.filter((item) => 
             item.Name.indexOf(enteredSearchTerm.value) > -1
           )
         }
       }else {
-        if (val === 'scenicSpot') {
+        if (selectedType.value === 'scenicSpot') {
           data = scenicSpot.value
-        } else if (val === 'restaurant') {
+        } else if (selectedType.value === 'restaurant') {
           data = restaurant.value
-        } else if (val === 'hotel') {
+        } else if (selectedType.value === 'hotel') {
           data = hotel.value
         }
       }
 
-      finalSearch.value = data
-    }
-
-    async function goSearch(val = null) {
-      const paramData ={
-        val: val,
-        city: selectedCity.value
-      }
-      
-      if (selectedType.value === 'scenicSpot') {
-        await store.dispatch('setScenicSpot', paramData)
-      } else if (selectedType.value === 'restaurant') {
-        await store.dispatch('setRestaurant', paramData)
-      } else if (selectedType.value === 'hotel') {
-        await store.dispatch('setHotel', paramData)
-      }
-
       isSearch.value = true
-      availableData(selectedType.value)
+      finalSearch.value = data
     }
 
     async function submitForm() {
@@ -185,13 +168,18 @@ export default {
       show.value = val
     }
 
-    function getData(val) {
-      store.dispatch('setScenicSpot', val)
-      store.dispatch('setRestaurant', val)
-      store.dispatch('setHotel', val)
+    function getData(val = null) {
+      const paramData ={
+        val: val,
+        city: selectedCity.value
+      }
+
+      store.dispatch('setScenicSpot',paramData)
+      store.dispatch('setRestaurant',paramData)
+      store.dispatch('setHotel',paramData)
     }
     
-    // getData(10)
+    getData(20)
     
 
     return {

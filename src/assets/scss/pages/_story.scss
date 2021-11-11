@@ -225,8 +225,8 @@
           font-weight: $regular;
           margin-left: 25px;
           cursor: pointer;
+
           overflow: hidden;
-  
           display: -webkit-box;
           text-overflow: ellipsis;
           -webkit-line-clamp: 2; /*行數*/

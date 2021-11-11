@@ -65,7 +65,7 @@
           </div>
         </div>
         <div class="story__side">
-          <div class="story__side--map" ref="mapDivRef"></div>
+          <div class="story__side--map" ref="divRef"></div>
           <div class="story__side--hot">
             <div class="story__side--hot-title">
               <h2 v-if="type == 'restaurant'">熱門美食</h2>
@@ -100,8 +100,10 @@ export default {
     const router = useRouter()
     const map = ref(null)
     const marker = ref(null)
-    const mapDivRef = ref(null)
+    const divRef = ref(null)
     const curimg = ref(0)
+
+    console.log(props.storyId)
 
     const scenicSpot = computed(() => store.getters.scenicSpot)
     const restaurant = computed(() => store.getters.restaurant)
@@ -202,7 +204,7 @@ export default {
     }
     
     function initMap() {
-      map.value = new window.google.maps.Map(mapDivRef.value, {
+      map.value = new window.google.maps.Map(divRef.value, {
         zoom:  16,
         mapTypeId: 'terrain',
         center: position.value,
@@ -216,14 +218,14 @@ export default {
     }
 
     onMounted(() => {
-      initMap(mapDivRef.value)
+      initMap()
     })
 
     onBeforeRouteUpdate(() => {})
     
     return {
       curimg,
-      mapDivRef,
+      divRef,
       story,
       type,
       popular,
