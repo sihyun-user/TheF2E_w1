@@ -1,5 +1,5 @@
 import { createStore } from "vuex"
-import { API_URL, FILTER_PIC } from "../config.js"
+import { API_URL, FILTER_PIC, TOP_DATA } from "../config.js"
 import getAuthorizationHeader from '../helpers.js'
 import createPersistedState from "vuex-persistedstate";
 
@@ -28,33 +28,33 @@ const store = createStore({
     }
   },
   actions: {
-    async setScenicSpot(context, {val, city}) { 
-      const API = val && !city ? `${API_URL}/v2/Tourism/ScenicSpot?$top=${val}&$format=JSON&${FILTER_PIC}`  
-      : ( city ? `${API_URL}/v2/Tourism/ScenicSpot/${city}?$format=JSON&${FILTER_PIC}` : `${API_URL}/v2/Tourism/ScenicSpot?$format=JSON&${FILTER_PIC}`)
+    async setScenicSpot(context, city) { 
+      const API = !city ? `${API_URL}/v2/Tourism/ScenicSpot?$top=${TOP_DATA}&$format=JSON&${FILTER_PIC}`  
+      : `${API_URL}/v2/Tourism/ScenicSpot/${city}?$format=JSON&${FILTER_PIC}`
 
       const response = await fetch(API, {
         headers: getAuthorizationHeader()
       })
 
       if(!response.ok) {
-        alert('取得觀光景點資料失敗')
+        alert('取得景點資料失敗')
       }
 
       const responseData = await response.json()
-      // console.log(responseData)
+      console.log(responseData)
 
       context.commit('setScenicSpot', responseData)
     },
-    async setRestaurant(context, {val, city}) {
-      const API = val && !city ? `${API_URL}/v2/Tourism/Restaurant?$top=${val}&$format=JSON&${FILTER_PIC}`  
-      : ( city ? `${API_URL}/v2/Tourism/Restaurant/${city}?$format=JSON&${FILTER_PIC}` : `${API_URL}/v2/Tourism/Restaurant?$format=JSON&${FILTER_PIC}`)
+    async setRestaurant(context, city) {
+      const API =  !city ? `${API_URL}/v2/Tourism/Restaurant?$top=${TOP_DATA}0&$format=JSON&${FILTER_PIC}`:  
+      `${API_URL}/v2/Tourism/Restaurant/${city}?$format=JSON&${FILTER_PIC}`
       
       const response = await fetch(API, {
         headers: getAuthorizationHeader()
       })
 
       if(!response.ok) {
-        alert('取得觀光餐飲資料失敗')
+        alert('取得餐飲資料失敗')
       }
 
       const responseData = await response.json()
@@ -63,15 +63,15 @@ const store = createStore({
 
       context.commit('setRestaurant', responseData)
     },
-    async setHotel(context, {val, city}) {
-      const API = val && !city ? `${API_URL}/v2/Tourism/Hotel?$top=${val}&$format=JSON&${FILTER_PIC}`  
-      : ( city ? `${API_URL}/v2/Tourism/Hotel/${city}?$format=JSON&${FILTER_PIC}` : `${API_URL}/v2/Tourism/Hotel?$format=JSON&${FILTER_PIC}`)
+    async setHotel(context, city) {
+      const API = !city ? `${API_URL}/v2/Tourism/Hotel?$top=${TOP_DATA}&$format=JSON&${FILTER_PIC}`  
+      : `${API_URL}/v2/Tourism/Hotel/${city}?$format=JSON&${FILTER_PIC}`
       const response = await fetch(API, {
         headers: getAuthorizationHeader()
       })
 
       if(!response.ok) {
-        alert('取得觀光旅宿資料失敗')
+        alert('取得旅宿資料失敗')
       }
       
 

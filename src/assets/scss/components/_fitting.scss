@@ -72,6 +72,13 @@
     font-weight: $regular;
     margin-bottom: 25px;
 
+    overflow: hidden;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1; /*行數*/
+    -webkit-box-orient: vertical;
+    white-space: normal;
+
     & i {
       font-size: 14px;
       margin-right: 5px;

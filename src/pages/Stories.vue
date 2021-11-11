@@ -7,7 +7,7 @@
       </div>
       <h1>搜尋台灣</h1> 
 
-      <form @submit.prevent="submitForm" class="form">
+      <form @submit.prevent="goSearch" class="form">
         <div class="form__search">
           <input type="search" @input="enterSearch" :value="enteredSearchTerm" placeholder="請輸入關鍵字" />
         </div>
@@ -116,8 +116,18 @@ export default {
       enteredSearchTerm.value = event.target.value
     }
 
-    function goSearch() {
+    async function goSearch() {
       let data = []
+
+      if(selectedCity.value) {
+        if (selectedType.value === 'scenicSpot') {
+          await store.dispatch('setScenicSpot', selectedCity.value)
+        } else if (selectedType.value === 'restaurant') {
+          await store.dispatch('setRestaurant', selectedCity.value)
+        } else if (selectedType.value === 'hotel') {
+          await store.dispatch('setHotel', selectedCity.value)
+        }
+      }
 
       if(enteredSearchTerm.value) {
         if (selectedType.value === 'scenicSpot') {
@@ -157,6 +167,7 @@ export default {
       selectedType.value = val.type
       selectedCity.value = val.city
       enteredSearchTerm.value = val.keyword
+      console.log(val)
       submitForm()
     }
 
@@ -168,20 +179,14 @@ export default {
       show.value = val
     }
 
-    function getData(val = null) {
-      const paramData ={
-        val: val,
-        city: selectedCity.value
-      }
-
-      store.dispatch('setScenicSpot',paramData)
-      store.dispatch('setRestaurant',paramData)
-      store.dispatch('setHotel',paramData)
+    function getData() {
+      store.dispatch('setScenicSpot', null)
+      store.dispatch('setRestaurant', null)
+      store.dispatch('setHotel', null)
     }
     
     getData(20)
     
-
     return {
       selectedType,
       isSearch,

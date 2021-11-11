@@ -90,11 +90,13 @@
               <h1>{{ res.Name }}</h1>
               <div class="aside__card-phone">
                 <i class="fas fa-phone-alt"></i>
-                <span>{{ res.Phone }}</span>
+                <span v-if="res.Phone">{{ res.Phone }}</span>
+                <span v-else>暫無電話資訊</span>
               </div>
               <div class="aside__card-address">
                 <i class="fas fa-map-marker-alt"></i>
-                <span>{{ res.Address }}</span>
+                <span v-if="res.Address">{{ res.Address }}</span>
+                <span v-else>暫無地址資訊</span>
               </div>
             </div>
           </li>
@@ -231,8 +233,24 @@ export default {
       enteredSearchTerm.value = event.target.value
     }
 
-    function goSearch() {
+    async function goSearch() {
       let filterData = []
+
+      // if(selectedCity.value) {
+      //   if (selectedType.value === 'scenicSpot') {
+      //     await store.dispatch('setScenicSpot', selectedCity.value)
+      //   } else if (selectedType.value === 'restaurant') {
+      //     await store.dispatch('setRestaurant', selectedCity.value)
+      //   } else if (selectedType.value === 'hotel') {
+      //     await store.dispatch('setHotel', selectedCity.value)
+      //   }
+      // }
+
+      if(selectedCity.value) {
+        await store.dispatch('setScenicSpot', selectedCity.value)
+        await store.dispatch('setRestaurant', selectedCity.value)
+        await store.dispatch('setHotel', selectedCity.value)
+      }
 
       if(enteredSearchTerm.value) {
         filterData = typeCards.value.filter((item) => 
@@ -301,15 +319,10 @@ export default {
     setPageResults(1)
     /* 抓取頁數結束 */
 
-    function getData(val = null) {
-      const paramData = {
-        val: val,
-        city: null
-      }
-
-      store.dispatch('setScenicSpot', paramData)
-      store.dispatch('setRestaurant', paramData)
-      store.dispatch('setHotel', paramData)
+    function getData() {
+      store.dispatch('setScenicSpot', null)
+      store.dispatch('setRestaurant', null)
+      store.dispatch('setHotel', null)
     }
 
     getData(20)
