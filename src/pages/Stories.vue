@@ -89,7 +89,7 @@
 
 <script>
 import { ref, computed } from 'vue'
-import { useStore } from 'vuex';
+import { useStore } from 'vuex'
 import CardItem from '../components/CardItem.vue'
 import searchResults from '../components/searchResults.vue'
 import SearchFilter from '../components/SearchFilter.vue'
