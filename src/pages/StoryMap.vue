@@ -8,17 +8,10 @@
             <img src="@/assets/img/location.png">
           </div>
           <div class="form__search">
-            <input type="search" placeholder="請輸入關鍵字" />
+            <input type="search" @input="enterSearch" :value="enteredSearchTerm" placeholder="請輸入關鍵字" />
           </div>
           <div class="form__menu">
-            <div class="form__select">
-              <select name="type" id="type-select" v-model="selectedType">
-                <option value="restaurant">美食</option>
-                <option value="hotel">住宿</option>
-                <option value="scenicSpot">觀光</option>
-              </select>
-            </div>
-            <button type="submit" class="form__btn form__btn--1">搜尋</button>
+            <button type="submit" class="form__btn form__btn--1" @click="goSearch">搜尋</button>
             <button type="button" class="form__btn form__btn--2" @click="handleShow">進階搜尋</button>
           </div>
         </form>
@@ -48,7 +41,7 @@
         </li>
       </ul>
 
-      <span class="aside__infonum">共有{{ selected.length }}筆資料</span>
+      <span class="aside__infonum">共有{{ searchCards.length }}筆資料</span>
 
       <div class="aside__cardWrap">
         <ul>
@@ -63,7 +56,7 @@
               <h1>{{ res.Name }}</h1>
               <div class="aside__card-phone">
                 <i class="fas fa-phone-alt"></i>
-                <span>{{ res.Phone }}}</span>
+                <span>{{ res.Phone }}</span>
               </div>
               <div class="aside__card-address">
                 <i class="fas fa-map-marker-alt"></i>
@@ -72,9 +65,15 @@
             </div>
           </li>
         </ul>
+        
+        <div class="aside__notFoundCards" v-if="searchCards.length == 0">
+          <p v-if="selectedType == 'restaurant'">目前沒有美食資料，請重新查詢</p>
+          <p v-if="selectedType == 'hotel'">目前沒有住宿資料，請重新查詢</p>
+          <p v-else>目前沒有觀光資料，請重新查詢</p>
+        </div>
       </div>
 
-      <div class="aside__pages" v-if="selected.length != 0">
+      <div class="aside__pages" v-if="searchCards.length != 0">
         <div class="aside__pages-btn aside__pages-lastOff">
           <button class="aside__pages-btn--gray" v-if="curPage == 1">
             <i class="fas fa-angle-double-left"></i>
@@ -152,7 +151,9 @@ export default {
   setup() {
     const store =useStore()
     const resultsPerPage = RES_PER_PAGE
+    const enteredSearchTerm = ref('')
     const selectedType = ref('restaurant')
+    const searchCards = ref(null)
     const story = ref(null)
     const curPage = ref(1)
     const pageResults = ref(null)
@@ -164,20 +165,43 @@ export default {
     const restaurant = computed(() => store.getters.restaurant)
     const hotel = computed(() => store.getters.hotel)
 
-    const selected = computed(() =>{
-      let select = []
+    const typeCards = computed(() => {
+      let search = []
       if(selectedType.value == 'restaurant') {
-        select = restaurant.value
+        search = restaurant.value
       }else if(selectedType.value == 'scenicSpot'){
-        select = scenicSpot.value
+        search = scenicSpot.value
       }else {
-        select = hotel.value
+        search = hotel.value
       }
 
-      return select
+      return search
     })
+
     
-    
+    function enterSearch(event){
+      enteredSearchTerm.value = event.target.value
+    }
+
+    function availableData() {
+      let filterData = []
+
+      if(enteredSearchTerm.value) {
+        filterData = typeCards.value.filter((item) => 
+          item.Name.indexOf(enteredSearchTerm.value) > -1
+        )
+      }else {
+        filterData = typeCards.value
+      }
+
+      searchCards.value = filterData
+    }
+    availableData()
+
+    function goSearch(){
+      availableData()
+    }
+
     function selectType (type){
       selectedType.value = type
     }
@@ -209,7 +233,7 @@ export default {
     }
 
     /* 抓取頁數開始 */
-    const numPages = computed(() => Math.ceil(selected.value.length / resultsPerPage))
+    const numPages = computed(() => Math.ceil(searchCards.value.length / resultsPerPage))
 
     function goto(val) {
       curPage.value += val
@@ -224,16 +248,21 @@ export default {
       const start = (page -1) * resultsPerPage // 0
       const end = page * resultsPerPage // 7
       
-      pageResults.value= selected.value.slice(start, end)
+      pageResults.value = searchCards.value.slice(start, end)
     }
 
     watch(curPage, () => setPageResults(curPage.value))
 
     watch(selectedType , (newVal) => {
-      console.log(newVal)
       if(newVal == selectedType.value) {
         curPage.value = 1
+        availableData()
+        setPageResults(curPage.value)
       }
+    })
+
+    watch(searchCards , () => {
+      setPageResults(curPage.value)
     })
 
     setPageResults(1)
@@ -258,15 +287,18 @@ export default {
 
     return {
       mapDivRef,
-      selected,
+      enteredSearchTerm,
       selectedType,
       selectType,
+      searchCards,
       selectedCard,
       curPage,
       numPages,
       pageResults,
       goto,
       changePage,
+      enterSearch,
+      goSearch
     }
   }
 }

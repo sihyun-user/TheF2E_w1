@@ -4,6 +4,7 @@
   .map {
     width: 7800px;
     max-width: 100%;
+    min-height: calc(100vh - 90px);
   }
 
   .aside {
@@ -133,6 +134,11 @@
       }
     }
 
+    &__notFoundCards {
+      margin-top: 30px;
+      font-weight: $regular;
+    }
+
     &__pages {
       display: flex;
       justify-content: center;
@@ -214,7 +220,7 @@
     }
 
     &__search {
-      width: 250px;
+      width: 320px;
       max-width: 100%;
       margin: 0 10px;
     
@@ -231,34 +237,6 @@
 
     &__menu {
       display: flex;
-    }
-
-    &__select {
-      position: relative;
-
-      & select {
-        font-size: 16px;
-        color: $color-primary;
-        font-weight: $bold;
-        width: 90px;
-        height: 44px;
-        border-radius: 10px;
-        border: 0;
-        outline: none;
-        padding: 0 5px 0 15px;
-        background-color: $color-white;
-        border: 2px solid #AEAEAE;
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
-      }
-      &::after {
-        content: "\f078";
-        font-weight: 900;
-        font-family: 'Font Awesome 5 Free';
-        pointer-events: none;
-        position: absolute;
-        right: 18px;
-        top: 13px;
-      }
     }
 
     &__btns {
@@ -278,7 +256,7 @@
       &--1 {
         color: $color-white;
         background-color: $color-orange;
-        margin: 0 10px;
+        margin-right: 10px;
       }
 
       &--2 {
