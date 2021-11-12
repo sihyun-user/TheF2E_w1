@@ -28,14 +28,12 @@
 
 <script>
 import { toRefs, computed } from 'vue'
-import { useRoute } from 'vue-router'
 export default {
   props: ['id', 'name', 'address', 'phone', 'picture', 'type'],
   setup(props) {
-    const route = useRoute()
     const { id, type } = toRefs(props)
 
-    const storyDetailsLink = computed(() => `${route.path}/${id.value}?type=${type.value}`)
+    const storyDetailsLink = computed(() => `/stories/${id.value}?type=${type.value}`)
 
     return {
       storyDetailsLink

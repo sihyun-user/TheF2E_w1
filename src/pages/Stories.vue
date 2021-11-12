@@ -7,7 +7,7 @@
       </div>
       <h1>搜尋台灣</h1> 
 
-      <form @submit.prevent="goSearch" class="form">
+      <section class="form">
         <div class="form__search">
           <input type="search" @input="enterSearch" :value="enteredSearchTerm" placeholder="請輸入關鍵字" />
         </div>
@@ -19,10 +19,20 @@
               <option value="scenicSpot">觀光</option>
             </select>
           </div>
-          <button type="submit" class="form__btn form__btn--1">搜尋</button>
-          <button type="button" class="form__btn form__btn--2" @click="handleShow">進階搜尋</button>
+          <div class="form__btnsPC">
+            <button class="form__btnsPC--1" @click="goSearch">搜尋</button>
+            <button class="form__btnsPC--2" @click="handleShow">進階搜尋</button>
+          </div>
+          <div class="form__btnsMobile">
+            <button class="form__btnsMobile--1" @click="goSearch">
+              <i class="fas fa-search"></i>
+            </button>
+            <button class="form__btnsMobile--2" @click="handleShow">
+              <i class="fas fa-bars"></i>
+            </button>
+          </div>
         </div>
-      </form>
+      </section>
     </div>
 
     <div class="main" v-if="!isSearch">
@@ -144,6 +154,8 @@ export default {
             item.Name.indexOf(enteredSearchTerm.value) > -1
           )
         }
+
+        enteredSearchTerm.value = ''
       }else {
         if (selectedType.value === 'scenicSpot') {
           data = scenicSpot.value

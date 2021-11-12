@@ -44,9 +44,18 @@
           <div class="form__search">
             <input type="search" @input="enterSearch" :value="enteredSearchTerm" placeholder="請輸入關鍵字" />
           </div>
-          <div class="form__menu">
-            <button class="form__btn form__btn--1" @click="goSearch">搜尋</button>
-            <button class="form__btn form__btn--2" @click="handleShow">進階搜尋</button>
+          <div class="form__btnsPC">
+            <button class="form__btnsPC--1" @click="goSearch">搜尋</button>
+            <button class="form__btnsPC--2" @click="handleShow">進階搜尋</button>
+          </div>
+
+          <div class="form__btnsMobile">
+            <button class="form__btnsMobile--1" @click="goSearch">
+              <i class="fas fa-search"></i>
+            </button>
+            <button class="form__btnsMobile--2" @click="handleShow">
+              <i class="fas fa-bars"></i>
+            </button>
           </div>
         </section>
       </div>
@@ -106,9 +115,9 @@
         </div>
       </div>
 
-      <div class="aside__pages" v-if="searchCards.length != 0">
-        <div class="aside__pages-btn aside__pages-lastOff">
-          <button class="aside__pages-btn--gray" v-if="curPage == 1">
+      <div class="pages" v-if="searchCards.length != 0">
+        <div class="pages-btn pages-lastOff">
+          <button class="pages-btn--gray" v-if="curPage == 1">
             <i class="fas fa-angle-double-left"></i>
           </button>
           <button @click="changePage(1)" v-else>
@@ -116,8 +125,8 @@
           </button>
         </div>
 
-        <div class="aside__pages-btn aside__pages-last">
-          <button class="aside__pages-btn--gray" v-if="curPage == 1">
+        <div class="pages-btn pages-last">
+          <button class="pages-btn--gray" v-if="curPage == 1">
             <i class="fas fa-angle-left"></i>
           </button>
           <button @click="goto(-1)" v-else>
@@ -125,7 +134,7 @@
           </button>
         </div>
         
-        <ul class="aside__pages--other" v-if="numPages < 9">
+        <ul class="pages--other" v-if="numPages < 9">
           <li 
           v-for="(num, index) in numPages" 
           :key="index" 
@@ -134,28 +143,29 @@
           >
           {{ num }}</li>
         </ul>
-        <ul class="aside__pages--other" v-else>
-          <li 
-          v-for="num in 3" 
-          :key="num" 
-          :class="{ curPageStyle: num == curPage }"
-          @click="changePage(num)" 
-          >
-          {{ num }}
-          </li>
-          <li>...</li>
-          <li 
-          v-for="(num, index) in 3" 
-          :key="num" 
-          :class="{ curPageStyle: curPage == numPages + (index - 2) }"
-          @click="changePage(numPages + (index - 2))" 
-          >
-          {{ numPages + (index - 2) }}
-          </li> 
-        </ul>
+        <ul class="pages--other" v-else>
+        <li :class="{ curPage: 1 == curPage }" @click="changePage(1)" >1</li>
+        <li :class="{ curPage: 2 == curPage }" @click="changePage(2)" >2</li>
+        <li :class="{ curPage: pageVal == curPage }" @click="changePage(pageVal)">
+          {{ pageVal }}
+        </li>
+        <li>...</li>
+        <li
+        :class="{ curPage: curPage == numPages-1 }"
+        @click="changePage(numPages-1)" 
+        >
+        {{ numPages-1 }}
+        </li>
+        <li
+        :class="{ curPage: curPage == numPages}"
+        @click="changePage(numPages)" 
+        >
+        {{ numPages }}
+        </li> 
+      </ul>
 
-        <div class="aside__pages-btn aside__pages-next">
-          <button class="aside__pages-btn--gray" v-if="curPage == numPages">
+        <div class="pages-btn pages-next">
+          <button class="pages-btn--gray" v-if="curPage == numPages">
             <i class="fas fa-angle-right"></i>
           </button>
           <button @click="goto(1)" v-else>
@@ -163,8 +173,8 @@
           </button>
         </div>
 
-        <div class="aside__pages-btn aside__pages-nextOff">
-          <button class="aside__pages-btn--gray" v-if="curPage == numPages">
+        <div class="pages-btn pages-nextOff">
+          <button class="pages-btn--gray" v-if="curPage == numPages">
             <i class="fas fa-angle-double-right"></i>
           </button>
           <button @click="changePage(numPages)" v-else>
@@ -200,6 +210,7 @@ export default {
     const story = ref(null)
     const curPage = ref(1)
     const pageResults = ref(null)
+    const pageVal = ref(3)
     const map = ref(null)
     const divRef = ref(null)
     const selectedMark = ref(null)
@@ -304,7 +315,20 @@ export default {
       pageResults.value = searchCards.value.slice(start, end)
     }
 
-    watch(curPage, () => setPageResults(curPage.value))
+    function calPage() {
+      if(curPage.value >= 3) {
+        pageVal.value = curPage.value
+      }
+
+      if(curPage.value >= numPages.value -2 ) {
+        pageVal.value = numPages.value -2
+      }
+    }
+
+    watch(curPage, () => {
+      calPage()
+      setPageResults(curPage.value)
+    })
 
     watch(selectedType , (newVal) => {
       if(newVal == selectedType.value) {
@@ -346,7 +370,7 @@ export default {
         const centerVal = locaCenter.value
 
         map.value = new window.google.maps.Map(divRef.value, {
-          zoom: 9,
+          zoom: selectedCity.value ? 12 : 8,
           mapTypeId: 'terrain',
           center: centerVal,
           disableDefaultUI: false,
@@ -477,6 +501,7 @@ export default {
       selectedCard,
       curPage,
       numPages,
+      pageVal,
       pageResults,
       goto,
       changePage,

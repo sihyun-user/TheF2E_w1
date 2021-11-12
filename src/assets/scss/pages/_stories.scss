@@ -61,11 +61,12 @@
     }
 
     @include mobile {
-      display: none;
+      // display: none;
     }
 
     &__search {
       width: 100%;
+      margin-right: 10px;
     
       & input {
         font: inherit;
@@ -78,11 +79,98 @@
 
     &__menu {
       display: flex;
-      margin-left: 10px;
     }
+
+    &__btnsPC {
+      display: flex;
+
+      & button {
+        font-size: 16px;
+        font-weight: $bold;
+        width: 90px;
+        height: 44px;
+        border-radius: 10px;
+        cursor: pointer;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+        display: block;
+
+        @include desktop {
+          width: 180px;
+        }
+
+        @include pad {
+          width: 120px;
+        }
+
+        @include mobile {
+          display: none;
+        }
+      }
+
+      &--1 {
+        color: $color-white;
+        background-color: $color-orange;
+        margin: 0 10px;
+
+        &:hover {
+          background-color: #e24511;
+        }
+      }
+
+      &--2 {
+        color: $color-orange;
+        background-color: $color-white;
+        border: 1px solid $color-orange;
+      }
+    }
+
+    &__btnsMobile {
+      display: flex;
+
+
+      & button {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        display: none;
+
+        @include mobile {
+          display: block;
+        }
+
+        & i {
+          font-size: 25px;
+        }
+      }
+      
+      &--1 {
+        color: $color-white;
+        background-color: $color-orange;
+        margin-right: 10px;
+        
+        &:hover {
+          background-color: #e24511;
+        }
+      }
+
+      &--2 {
+        border: 1px solid $color-orange;
+        background-color: $color-white;
+        & i {
+          color: $color-orange;
+        }
+    
+      }
+    } 
 
     &__select {
       position: relative;
+
+      @include mobile {
+        display: none;
+      }
 
       & select {
         font-size: 16px;
@@ -91,7 +179,6 @@
         width: 90px;
         height: 44px;
         border-radius: 10px;
-        margin: 0 5px;
         border: 0;
         outline: none;
         padding: 0 5px 0 15px;
@@ -194,10 +281,6 @@
   
       @include desktop {
         height: 100%;
-      }
-  
-      @include ipadPro {
-        margin-bottom: 198px;
       }
     }
   
@@ -312,64 +395,6 @@
       justify-content: center;
       text-align: start;
       margin: 70px 0 100px;
-    }
-
-    &__pages {
-      display: flex;
-      justify-content: center;
-      margin: 75px 0;
-
-      &--other {
-        display: flex;
-        align-items: center;
-        margin: 0 20px;
-
-        & li {
-          font-size: 18px;
-          font-weight: $regular;
-          width: 30px;
-          height: 30px;
-          line-height: 30px;
-          border-radius: 100%;
-          text-align: center;
-          margin: 0 6px;
-          cursor: pointer;
-          transition: all .4s ease-out;
-          
-
-          &:hover {
-            color: $color-white;
-            background-color: $color-orange;
-          }
-        }
-      }
-      
-      &-btn{
-        & button {
-          font-size: 20px;
-          width: 30px;
-          height: 30px;
-          color: $color-orange;
-          border: 1px solid $color-orange;
-          border-radius: 3px;
-          cursor: pointer;
-        }
-
-        &--gray {
-          color: #CFCFCF !important;
-          border: 1px solid #E5E5E5 !important;
-        }
-      }
-
-      &-lastOff,
-      &-nextOff {
-        margin: 0 10px;
-      }
-      
-      & .curPageStyle {
-        color: $color-white;
-        background-color: $color-orange;
-      }
     }
   }
 }

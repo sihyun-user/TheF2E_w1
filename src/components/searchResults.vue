@@ -31,9 +31,9 @@
         <p v-if="selected.length == 0" class="results__error">沒有搜尋到任何東西，請再重新搜尋</p>
       </div>
     </div>
-    <div class="results__pages" v-if="selected.length != 0">
-      <div class="results__pages-btn results__pages-lastOff">
-        <button class="results__pages-btn--gray" v-if="curPage == 1">
+    <div class="pages" v-if="selected.length != 0">
+      <div class="pages-btn pages-lastOff">
+        <button class="pages-btn--gray" v-if="curPage == 1">
           <i class="fas fa-angle-double-left"></i>
         </button>
         <button @click="changePage(1)" v-else>
@@ -41,8 +41,8 @@
         </button>
       </div>
 
-      <div class="results__pages-btn results__pages-last">
-        <button class="results__pages-btn--gray" v-if="curPage == 1">
+      <div class="pages-btn pages-last">
+        <button class="pages-btn--gray" v-if="curPage == 1">
           <i class="fas fa-angle-left"></i>
         </button>
         <button @click="goto(-1)" v-else>
@@ -50,7 +50,7 @@
         </button>
       </div>
       
-      <ul class="results__pages--other" v-if="numPages < 9">
+      <ul class="pages--other" v-if="numPages < 9">
         <li 
         v-for="(num, index) in numPages" 
         :key="index" 
@@ -59,28 +59,29 @@
         >
         {{ num }}</li>
       </ul>
-      <ul class="results__pages--other" v-else>
-        <li 
-        v-for="num in 3" 
-        :key="num" 
-        :class="{ curPageStyle: num == curPage }"
-        @click="changePage(num)" 
-        >
-        {{ num }}
+      <ul class="pages--other" v-else>
+        <li :class="{ curPage: 1 == curPage }" @click="changePage(1)" >1</li>
+        <li :class="{ curPage: 2 == curPage }" @click="changePage(2)" >2</li>
+        <li :class="{ curPage: pageVal == curPage }" @click="changePage(pageVal)">
+          {{ pageVal }}
         </li>
         <li>...</li>
-        <li 
-        v-for="(num, index) in 3" 
-        :key="num" 
-        :class="{ curPageStyle: curPage == numPages + (index - 2) }"
-        @click="changePage(numPages + (index - 2))" 
+        <li
+        :class="{ curPage: curPage == numPages-1 }"
+        @click="changePage(numPages-1)" 
         >
-        {{ numPages + (index - 2) }}
+        {{ numPages-1 }}
+        </li>
+        <li
+        :class="{ curPage: curPage == numPages}"
+        @click="changePage(numPages)" 
+        >
+        {{ numPages }}
         </li> 
       </ul>
 
-      <div class="results__pages-btn results__pages-next">
-        <button class="results__pages-btn--gray" v-if="curPage == numPages">
+      <div class="pages-btn pages-next">
+        <button class="pages-btn--gray" v-if="curPage == numPages">
           <i class="fas fa-angle-right"></i>
         </button>
         <button @click="goto(1)" v-else>
@@ -88,8 +89,8 @@
         </button>
       </div>
 
-      <div class="results__pages-btn results__pages-nextOff">
-        <button class="results__pages-btn--gray" v-if="curPage == numPages">
+      <div class="pages-btn pages-nextOff">
+        <button class="pages-btn--gray" v-if="curPage == numPages">
           <i class="fas fa-angle-double-right"></i>
         </button>
         <button @click="changePage(numPages)" v-else>
@@ -114,8 +115,20 @@ export default {
     const selectedType = ref('restaurant')
     const curPage = ref(1)
     const pageResults = ref(null)
+    const pageVal = ref(3)
 
     const numPages = computed(() => Math.ceil(selected.value.length / resultsPerPage))
+
+
+    function calPage() {
+      if(curPage.value >= 3) {
+        pageVal.value = curPage.value
+      }
+
+      if(curPage.value >= numPages.value -2 ) {
+        pageVal.value = numPages.value -2
+      }
+    }
 
     function goto(val) {
       curPage.value += val
@@ -138,7 +151,10 @@ export default {
       setPageResults(1)
     })
 
-    watch(curPage, () => setPageResults(curPage.value))
+    watch(curPage, () => {
+      calPage()
+      setPageResults(curPage.value)
+    })
 
     watch(selectedType , (newVal) => {
       if(newVal == selectedType.value) {
@@ -154,7 +170,8 @@ export default {
       numPages,
       pageResults,
       goto,
-      changePage
+      changePage,
+      pageVal
     }
   }
 }
