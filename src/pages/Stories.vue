@@ -31,13 +31,13 @@
         <h2 class="main__title main__title--1">熱門景點</h2>
         <ul class="main__cards">
           <card-item
-          v-for="spot in scenicSpot"
-          :key="spot.ID"
-          :id="spot.ID"
-          :name="spot.Name"
-          :address="spot.Address"
-          :phone="spot.Phone"
-          :picture="spot.Picture.PictureUrl1"
+          v-for="pop in popular.scenicSpot"
+          :key="pop.ID"
+          :id="pop.ID"
+          :name="pop.Name"
+          :address="pop.Address"
+          :phone="pop.Phone"
+          :picture="pop.Picture.PictureUrl1"
           type="scenicSpot"
           >
           </card-item>
@@ -48,13 +48,13 @@
           <h2 class="main__title main__title--2">必吃美食</h2>
           <ul class="main__cards">
             <card-item
-            v-for="res in restaurant"
-            :key="res.ID"
-            :id="res.ID"
-            :name="res.Name"
-            :address="res.Address"
-            :phone="res.Phone"
-            :picture="res.Picture.PictureUrl1"
+            v-for="pop in popular.restaurant"
+            :key="pop.ID"
+            :id="pop.ID"
+            :name="pop.Name"
+            :address="pop.Address"
+            :phone="pop.Phone"
+            :picture="pop.Picture.PictureUrl1"
             type="restaurant"
             >
             </card-item> 
@@ -65,13 +65,13 @@
           <h2 class="main__title main__title--3">優質住宿</h2>
           <ul class="main__cards">
             <card-item
-            v-for="hot in hotel"
-            :key="hot.ID"
-            :id="hot.ID"
-            :name="hot.Name"
-            :address="hot.Address"
-            :phone="hot.Phone"
-            :picture="hot.Picture.PictureUrl1"
+            v-for="pop in popular.hotel"
+            :key="pop.ID"
+            :id="pop.ID"
+            :name="pop.Name"
+            :address="pop.Address"
+            :phone="pop.Phone"
+            :picture="pop.Picture.PictureUrl1"
             type="hotel"
             >
             </card-item>
@@ -90,6 +90,7 @@
 <script>
 import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
+import { RADOM_PAGENUM, POPULAR_PAGENUM } from "../config.js"
 import CardItem from '../components/CardItem.vue'
 import searchResults from '../components/searchResults.vue'
 import SearchFilter from '../components/SearchFilter.vue'
@@ -158,7 +159,7 @@ export default {
     }
 
     async function submitForm() {
-      await goSearch(20)
+      await goSearch()
       selectedCity.value = null
       enteredSearchTerm.value = ''
     }
@@ -179,13 +180,45 @@ export default {
       show.value = val
     }
 
+    /* 抽取熱門項目開始 */
+    const popular = computed(() => {
+      let popular = {}
+      popular.restaurant = getPopular(restaurant.value)
+      popular.hotel = getPopular(hotel.value)
+      popular.scenicSpot = getPopular(scenicSpot.value)
+
+      return popular
+    })
+    
+    // 隨機抽取8個熱門項目
+    function getPopular(type) {
+      let num = POPULAR_PAGENUM
+      let radom = []
+      for (let i = 0; i < RADOM_PAGENUM ; i++) {
+        radom.push(i)
+      }
+      radom.sort(() => {
+        return Math.random()-0.5;
+      })
+      radom.length = num
+
+      let popular = []
+      for(let i = 0; i < num ; i++) {
+        let num = radom[i]
+        popular.push(type[num])
+      }
+      return popular
+    }
+    /* 抽取熱門項目結束 */
+
     function getData() {
       store.dispatch('setScenicSpot', null)
       store.dispatch('setRestaurant', null)
       store.dispatch('setHotel', null)
     }
     
-    getData(20)
+    getData()
+    
     
     return {
       selectedType,
@@ -198,6 +231,7 @@ export default {
       hotel,
       goSearch,
       getData,
+      popular,
       enterSearch,
       updatedFilters,
       handleShow,

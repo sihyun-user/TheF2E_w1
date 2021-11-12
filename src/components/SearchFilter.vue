@@ -1,42 +1,44 @@
 <template>
   <div v-show="show" class="filter">
     <div class="filter__content">
-      <div class="filter__keyword">
+      <div class="filter__block">
+        <div class="filter__keyword">
         <i class="fas fa-search"></i>
         <input type="text" placeholder="請輸入關鍵字" v-model="keyword"/>
-      </div>
-      <div class="filter__type filter__wrap">
-        <h2 class="filter__title">類別</h2>
-        <div class="filter__items">
-          <input type="radio" name="type" id="restaurant" value="restaurant" checked v-model="filterType">
-          <label for="restaurant">美食</label>
-          <input type="radio" name="type" id="hotel" value="hotel" v-model="filterType">
-          <label for="hotel">住宿</label>
-          <input type="radio" name="type" id="scenicSpot" value="scenicSpot" v-model="filterType">
-          <label for="scenicSpot">觀光</label>
         </div>
-      </div>
-      <div class="filter__hot filter__wrap">
-        <h2 class="filter__title">熱門分類</h2>
-        <div class="filter__items">
-          <input type="checkbox" name="hot" id="hot-1" value="牛肉麵" v-model="filterHot">
-          <label for="hot-1">牛肉麵</label>
-          <input type="checkbox" name="hot" id="hot-2" value="海鮮" v-model="filterHot">
-          <label for="hot-2">海鮮餐廳</label>
+        <div class="filter__type filter__wrap">
+          <h2 class="filter__title">類別</h2>
+          <div class="filter__items">
+            <input type="radio" name="type" id="restaurant" value="restaurant" checked v-model="filterType">
+            <label for="restaurant">美食</label>
+            <input type="radio" name="type" id="hotel" value="hotel" v-model="filterType">
+            <label for="hotel">住宿</label>
+            <input type="radio" name="type" id="scenicSpot" value="scenicSpot" v-model="filterType">
+            <label for="scenicSpot">觀光</label>
+          </div>
         </div>
-      </div>
-      <div class="filter__city filter__wrap">
-        <h2 class="filter__title">城市</h2>
-        <ul class="filter__items">
-          <li v-for="city in cityData" :key="city.id">
-            <input type="radio" name="city" :id="city.id" :value="city.id"  v-model="filterCity">
-            <label :for="city.id">{{ city.name }}</label>
-          </li>
-        </ul>
-      </div>
-      <div class="filter__btns">
-        <button class="filter__btns--clear" @click="claerFilter">清除全部</button>
-        <button @click="submitFilter" class="filter__btns--search">查詢</button>
+        <div class="filter__hot filter__wrap">
+          <h2 class="filter__title">熱門分類</h2>
+          <div class="filter__items">
+            <input type="checkbox" name="hot" id="hot-1" value="牛肉麵" v-model="filterHot">
+            <label for="hot-1">牛肉麵</label>
+            <input type="checkbox" name="hot" id="hot-2" value="海鮮" v-model="filterHot">
+            <label for="hot-2">海鮮餐廳</label>
+          </div>
+        </div>
+        <div class="filter__city filter__wrap">
+          <h2 class="filter__title">城市</h2>
+          <ul class="filter__items">
+            <li v-for="city in cityData" :key="city.id">
+              <input type="radio" name="city" :id="city.id" :value="city.id"  v-model="filterCity">
+              <label :for="city.id">{{ city.name }}</label>
+            </li>
+          </ul>
+        </div>
+        <div class="filter__btns">
+          <button class="filter__btns--clear" @click="claerFilter">清除全部</button>
+          <button @click="submitFilter" class="filter__btns--search">查詢</button>
+        </div>
       </div>
       <i class="filter__close fas fa-times" @click="tryClose"></i>
     </div>

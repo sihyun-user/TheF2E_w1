@@ -1,6 +1,10 @@
 .storymap {
   display: flex;
 
+  @include desktop {
+    flex-direction: column;
+  }
+
   .mapWrap {
     position: relative;
   }
@@ -9,6 +13,15 @@
     width: 7800px;
     max-width: 100%;
     min-height: calc(100vh - 90px);
+
+    @include desktop {
+      min-height: 0;
+      height: 500px;
+    }
+
+    @include mobile {
+      height: 350px;
+    }
   }
 
   .mapCard {
@@ -18,6 +31,20 @@
     right: 10%;
     top: 50%;
     transform: translate3d(-8%, -50%, 0);
+    z-index: 11;
+
+    @include desktop {
+      width: 250px;
+      left: 2%;
+      top: -380px;
+      transform: translate3d(0, 0, 0);
+    }
+
+    @include mobile {
+      top: -200px;
+      left: 50%;
+      transform: translate3d(-50%, 0, 0);
+    }
 
     &:hover {
       box-shadow: none;
@@ -43,39 +70,41 @@
   }
 
   .aside {
+    min-width: 700px;
     padding: 0 50px;
     background-color: $color-white;
     box-shadow: -5px 5px 5px 0px rgba(0, 0, 0, 0.5);
     position: relative;
     z-index: 1;
 
+    @include desktop {
+      padding-top: 30px;
+    }
+
+    @include mobile {
+      min-width: 0;
+      padding: 30px 18px 0;
+    }
+
     &__type {
       margin-top: 20px;
-      padding: 0 30px;
       text-align: center;
       display: flex;
       justify-content: space-between;
-      margin-bottom: 25px;
+      margin-bottom: 10px;
 
       & li {
         font-size: 24px;
         font-weight: $bold;
-        width: 160px;
+        width: 100%;
         max-width: 100%;
         cursor: pointer;
-
-        &:hover {
-          color: #AEAEAE;
-
-          &::after {
-            background-color: #AEAEAE;
-          }
-        }
+        text-align: start;
 
         &::after {
           content: '';
           display: block;
-          width: 160px;
+          width: 100%;
           height: 6px;
           margin-top: 8px;
           border-radius: 20px;
@@ -116,7 +145,11 @@
       font-weight: $regular;
       color: #636363;
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 30px;
+    }
+
+    &__cardWrap{
+      min-height: 60vh;
     }
 
     &__card {
@@ -134,7 +167,7 @@
         content: '';
         display: inline-block;
         width: 6px;
-        height: 100px;
+        height: 110px;
         border-radius: 20px;
         background-color: $color-orange;
         position: absolute;
@@ -144,28 +177,61 @@
 
       & img {
         width: 250px;
-        height: 100px;
+        max-width: 100%;
+        height: 110px;
         display: block;
         object-fit: cover;
         border-radius: 5px;
         margin-right: 20px;
+
+        @include mobile {
+          width: 170px;
+          margin-right: 10px;
+        }
+
+        @include mobileM {
+          width: 145px;
+        }
+
+        @include mobileS {
+          width: 120PX;
+        }
       }
 
       &-content{
         width: 280px;
         max-width: 100%;
+
+        @include mobile {
+          width: 180px;
+        }
+
+        @include mobileM {
+          width: 155px;
+        }
+
+        @include mobileS {
+          width: 140PX;
+        }
       }
 
 
       & h1 {
         font-size: 18px;
-        margin: 8px 0 10px;
+        margin: 8px 0 12px;
+        line-height: 1.2;
+
+        overflow: hidden;
+        display: -webkit-box;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 2; /*行數*/
+        -webkit-box-orient: vertical;
+        white-space: normal;
       }  
 
       &-phone,
       &-address {
         font-size: 14px;
-        margin-bottom: 15px;
         line-height: 1.2;
         
         & i {
@@ -175,6 +241,8 @@
       }
 
       &-address {
+        margin-top: 15px;
+
         overflow: hidden;
         display: -webkit-box;
         text-overflow: ellipsis;
@@ -270,9 +338,8 @@
     }
 
     &__search {
-      width: 320px;
-      max-width: 100%;
-      margin: 0 10px;
+      width: 100%;
+      margin-right: 10px;
     
       & input {
         font: inherit;
@@ -303,6 +370,14 @@
       cursor: pointer;
       box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
 
+      @include desktop {
+        width: 180px;
+      }
+
+      @include pad {
+        width: 120px;
+      }
+
       &--1 {
         color: $color-white;
         background-color: $color-orange;
@@ -317,16 +392,30 @@
     }     
   }
 
-  .curType {
-    color: #AEAEAE;
-
-    &::after {
-      background-color: #AEAEAE;
-    }
-  }
-
   .infowindow {
     font-size: 16px;
     font-weight: $bold;
+  }
+
+  .curCard {
+    background: rgba(252, 101, 50, 0.2);
+  }
+
+  .cardSide1 {
+    &::after {
+      background-color: $color-orange;
+    }
+  }
+
+  .cardSide2 {
+    &::after {
+      background-color: $color-green;
+    }
+  }
+
+  .cardSide3 {
+    &::after {
+      background-color: $color-purple;
+    }
   }
 }

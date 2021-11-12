@@ -41,6 +41,18 @@
     }
   }
 
+  &__close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+
+    & i {
+      font-size: 24px;
+      color: $color-orange;
+      transition: all 0.3s ease-out;
+    }
+  }
+
   &__content {
     padding: 8px 8px 0;
     display: flex;
@@ -109,6 +121,7 @@
   width: 100%;
   max-width: 1000px;
   padding: 0 18px;
+  border-radius: 10px;
   position: fixed;
   left: 50%;
   top: 25%;
@@ -116,11 +129,26 @@
   padding: 0 18px;
   z-index: 11;
 
+  @include mobile {
+    top: 50%;
+    transform: translate3d(-50%, -50%, 0);
+  }
+
   &__content {
-    padding: 30px 18px 20px;
     background-color: $color-white;
     border-radius: 10px;
+    height: 500px;
+    overflow: hidden;
     position: relative;
+  }
+
+  &__block {
+    padding: 30px 18px 20px 18px;
+
+    @include mobile {
+      overflow-y: scroll;
+      height: 500px;
+    }
   }
 
   &__keyword {
@@ -145,26 +173,38 @@
     display: flex;
     align-items: flex-start;
     margin-bottom: 15px;
+
+    @include mobile {
+      flex-direction: column;
+    }
   }
 
   &__title {
     width: 10%;
     font-size: 18px;
     font-weight: $bold;
+
+    @include mobile {
+      width: 100%;
+      margin-bottom: 15px;
+    }
   }
 
   &__items {
     width: 90%;
     display: flex;
-    flex-wrap: wrap;      
+    flex-wrap: wrap;   
+    
 
     & label {
       display: inline-block;
       font-weight: $regular;
-      padding: 6px 25px;
+      width: 110px;
+      padding: 6px 10px;
       border-radius: 20px;
       border: 1px solid #AEAEAE;
-      margin: 0 5px 8px;
+      text-align: center;
+      margin: 0 5px 8px 0;
       cursor: pointer;
 
       &:hover {
@@ -203,6 +243,11 @@
         color: $color-white;
         background-color: #AEAEAE;
       }
+
+      @include mobile {
+        width: 35%;
+        margin-right: 5px;
+      }
     }
 
     &--search {
@@ -225,7 +270,8 @@
   }
 }
 
-.mask {
+.mask,
+.cardmask {
   width: 100%;
   min-height: 100vh;
   background-color: $color-black;
@@ -234,4 +280,12 @@
   top: 0;
   left: 0;
   z-index: 10;
+}
+
+.cardmask {
+  display: none;
+
+  @include mobile {
+    display: block;
+  }
 }

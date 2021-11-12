@@ -91,7 +91,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter ,onBeforeRouteUpdate } from 'vue-router'
-import { RADOM_NUMBER } from '../config.js';
+import { RADOM_STORYNUM, POPULAR_STORYNUM } from '../config.js'
 export default {
   props: ['storyId'],
   setup(props) {
@@ -102,8 +102,6 @@ export default {
     const marker = ref(null)
     const divRef = ref(null)
     const curimg = ref(0)
-
-    console.log(props.storyId)
 
     const scenicSpot = computed(() => store.getters.scenicSpot)
     const restaurant = computed(() => store.getters.restaurant)
@@ -174,9 +172,9 @@ export default {
     
     // 隨機抽取5個熱門項目
     function getPopular(type) {
-      let num = 5
+      let num = POPULAR_STORYNUM
       let radom = []
-      for (let i = 0; i < RADOM_NUMBER ; i++) {
+      for (let i = 0; i < RADOM_STORYNUM ; i++) {
         radom.push(i)
       }
       radom.sort(() => {

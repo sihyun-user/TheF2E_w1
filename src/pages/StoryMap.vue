@@ -3,27 +3,27 @@
     <div class="map" ref="divRef"></div>
     <div class="mapWrap">
       <div class="card mapCard" v-if="selectedMark">
-        <div class="card__heart">
-          <i class="far fa-heart"></i>
+        <div class="card__close" @click="selectedMark = null">
+          <i class="fas fa-times"></i>
         </div>
         <div class="card__pic">
-          <img :src="selectedMark.picture" alt="card">
+          <img :src="selectedMark.Picture.PictureUrl1" alt="card">
         </div>
         <div class="card__content">
           <div class="card__title">
-            <h2>{{ selectedMark.name }}</h2>
+            <h2>{{ selectedMark.Name }}</h2>
             <div class="card__phone">
               <i class="fas fa-phone-alt"></i>
-              <span v-if="selectedMark.phone">
-                {{ selectedMark.phone }}
+              <span v-if="selectedMark.Phone">
+                {{ selectedMark.Phone }}
               </span>
               <span v-else>暫無電話資訊</span>
             </div>
           </div>
           <div class="card__address">
             <i class="fas fa-map-marker-alt"></i>
-            <p v-if="selectedMark.address">
-              {{ selectedMark.address }}
+            <p v-if="selectedMark.Address">
+              {{ selectedMark.Address }}
             </p>
             <p v-else>暫無地址資訊</p>
           </div>
@@ -37,39 +37,30 @@
     </div>
     <div class="aside">
       <div class="aside__search">
-        <form @submit.prevent="submitForm" class="form">
-          <div class="form__location" @click="setlocation">
+        <section class="form">
+          <!-- <div class="form__location" @click="setlocation">
             <img src="@/assets/img/location.png">
-          </div>
+          </div> -->
           <div class="form__search">
             <input type="search" @input="enterSearch" :value="enteredSearchTerm" placeholder="請輸入關鍵字" />
           </div>
           <div class="form__menu">
-            <button type="submit" class="form__btn form__btn--1" @click="goSearch">搜尋</button>
-            <button type="button" class="form__btn form__btn--2" @click="handleShow">進階搜尋</button>
+            <button class="form__btn form__btn--1" @click="goSearch">搜尋</button>
+            <button class="form__btn form__btn--2" @click="handleShow">進階搜尋</button>
           </div>
-        </form>
+        </section>
       </div>
 
       <ul class="aside__type">
-        <li class="aside__type--1" 
-        :class="{ curType: selectedType == 'restaurant' }"
-        @click="selectType('restaurant')"
-        >
+        <li class="aside__type--1" v-if="selectedType == 'restaurant'">
           <i class="fas fa-utensils"></i>
           <span>美食</span>
         </li>
-        <li class="aside__type--2"
-        :class="{ curType: selectedType == 'hotel' }" 
-        @click="selectType('hotel')"
-        >
+        <li class="aside__type--2" v-else-if="selectedType == 'hotel'">
           <i class="fas fa-car"></i>
           <span>住宿</span>
         </li>
-        <li class="aside__type--3"
-        :class="{ curType: selectedType == 'scenicSpot' }"
-        @click="selectType('scenicSpot')"
-        >
+        <li class="aside__type--3" v-else>
           <i class="fas fa-mountain"></i>
           <span>觀光</span>
         </li>
@@ -80,10 +71,16 @@
       <div class="aside__cardWrap">
         <ul>
           <li 
-          class="aside__card" 
           v-for="res in pageResults"
           :key="res.ID"
           @click="selectedCard(res.ID)"
+          class="aside__card"
+          :class="[
+          { curCard: isActiveID ==  res.ID },
+          { cardSide1: selectedType == 'restaurant' },
+          { cardSide2: selectedType == 'hotel' },
+          { cardSide3: selectedType == 'scenicSpot' }
+          ]"
           >
             <img :src="res.Picture.PictureUrl1">
             <div class="aside__card-content">
@@ -180,12 +177,14 @@
     <search-filter v-show="show" @update-filter="updatedFilters" @close="handleClose"></search-filter>
   </section>
   <div v-show="show" class="mask"></div>
+  <div v-show="selectedMark" class="cardmask"></div>
 </template>
 
 <script>
-import { ref, computed , watch, onMounted } from 'vue'
+import { ref, computed , watch } from 'vue'
 import { useStore } from 'vuex'
 import { RES_MAP_PAGE } from "../config.js"
+import CITY_DATA from '../city-data.js'
 import SearchFilter from '../components/SearchFilter.vue'
 export default {
   components: {
@@ -194,6 +193,7 @@ export default {
   setup() {
     const store = useStore()
     const resultsPerPage = RES_MAP_PAGE
+    const cityData = CITY_DATA
     const enteredSearchTerm = ref('')
     const selectedType = ref('restaurant')
     const searchCards = ref(null)
@@ -206,67 +206,70 @@ export default {
     const infowindowVal = ref(null)
     const selectedCity = ref(null)
     const show = ref(false)
-    const locationVal = ref(false)
+    const locationVal = ref(null)
+    const locaCenter = ref()
+    const positions = ref(null)
+    const isActiveID = ref(false)
+    let markers = []
 
     const scenicSpot = computed(() => store.getters.scenicSpot)
     const restaurant = computed(() => store.getters.restaurant)
     const hotel = computed(() => store.getters.hotel)
 
     const storyDetailsLink = computed(() => {
-      return `/stories/${selectedMark.value.id}?type=${selectedMark.value.type}`
+      return `/stories/${selectedMark.value.ID}?type=${selectedType.value}`
     })
 
-    const typeCards = computed(() => {
-      let search = []
-      if(selectedType.value == 'restaurant') {
-        search = restaurant.value
-      }else if(selectedType.value == 'scenicSpot'){
-        search = scenicSpot.value
-      }else {
-        search = hotel.value
-      }
-
-      return search
-    })
     
     function enterSearch(event){
       enteredSearchTerm.value = event.target.value
     }
 
     async function goSearch() {
-      let filterData = []
-
-      // if(selectedCity.value) {
-      //   if (selectedType.value === 'scenicSpot') {
-      //     await store.dispatch('setScenicSpot', selectedCity.value)
-      //   } else if (selectedType.value === 'restaurant') {
-      //     await store.dispatch('setRestaurant', selectedCity.value)
-      //   } else if (selectedType.value === 'hotel') {
-      //     await store.dispatch('setHotel', selectedCity.value)
-      //   }
-      // }
+      let data = []
 
       if(selectedCity.value) {
-        await store.dispatch('setScenicSpot', selectedCity.value)
-        await store.dispatch('setRestaurant', selectedCity.value)
-        await store.dispatch('setHotel', selectedCity.value)
+        if (selectedType.value === 'scenicSpot') {
+          await store.dispatch('setScenicSpot', selectedCity.value)
+          positions.value = scenicSpot.value
+        } else if (selectedType.value === 'restaurant') {
+          await store.dispatch('setRestaurant', selectedCity.value)
+          positions.value = restaurant.value
+        } else if (selectedType.value === 'hotel') {
+          await store.dispatch('setHotel', selectedCity.value)
+          positions.value = hotel.value
+        }
       }
 
       if(enteredSearchTerm.value) {
-        filterData = typeCards.value.filter((item) => 
-          item.Name.indexOf(enteredSearchTerm.value) > -1
-        )
+        if (selectedType.value === 'scenicSpot') {
+          data = scenicSpot.value.filter((item) => 
+            item.Name.indexOf(enteredSearchTerm.value) > -1
+          )
+        } else if (selectedType.value === 'restaurant') {
+          data = restaurant.value.filter((item) => 
+            item.Name.indexOf(enteredSearchTerm.value) > -1
+          )
+        } else if (selectedType.value === 'hotel') {
+          data = hotel.value.filter((item) => 
+            item.Name.indexOf(enteredSearchTerm.value) > -1
+          )
+        }
+
+        enteredSearchTerm.value = ''
       }else {
-        filterData = typeCards.value
+        if (selectedType.value === 'scenicSpot') {
+          data = scenicSpot.value
+        } else if (selectedType.value === 'restaurant') {
+          data = restaurant.value
+        } else if (selectedType.value === 'hotel') {
+          data = hotel.value
+        }
       }
 
-      searchCards.value = filterData
+      searchCards.value = data
     }
     goSearch()
-
-    function selectType (type){
-      selectedType.value = type
-    }
 
     function selectedCard (cardId) {
       if(selectedType.value == 'restaurant') {
@@ -277,9 +280,9 @@ export default {
         story.value = scenicSpot.value.find(item => item.ID === cardId)
       }
 
-      const selected = positions.value.find((card) => card.id === cardId)
+      const selected = positions.value.find((card) => card.ID === cardId)
       selectedMark.value = selected
-      initMap()
+      isActiveID.value = selected.ID
     }
 
     /* 抓取頁數開始 */
@@ -319,68 +322,37 @@ export default {
     setPageResults(1)
     /* 抓取頁數結束 */
 
-    function getData() {
-      store.dispatch('setScenicSpot', null)
-      store.dispatch('setRestaurant', null)
-      store.dispatch('setHotel', null)
-    }
+    async function getData() {
+      if (selectedType.value === 'scenicSpot') {
+        await store.dispatch('setScenicSpot', null)
+        positions.value = scenicSpot.value
+      } else if (selectedType.value === 'restaurant') {
+        await store.dispatch('setRestaurant', null)
+        positions.value = restaurant.value
+      } else if (selectedType.value === 'hotel') {
+        await store.dispatch('setHotel', null)
+        positions.value = hotel.value
+      }
 
-    getData(20)
+      resetCenter()
+      initMap()
+      setMarker()
+    }
+    getData()
 
     /* 撈取地圖資料開始 */
-    const positions = computed(() => store.getters.positions)
-
-    function initPosition() {
-      store.dispatch('setPositions', searchCards.value)
-    }
-
-    async function initMap(loca = null) {
-      try {
-        const zoomVal = selectedMark.value ? 17 : 9
-        
-        let centerVal
-        if(selectedMark.value && !loca) {
-          centerVal = { lat: selectedMark.value.lat, lng: selectedMark.value.lng }
-        }else if(!selectedMark.value && loca) {
-          centerVal = loca
-        }else {
-          centerVal = { lat: 23.97565, lng: 120.9738819 }
-        }
-        
-        // const centerVal = selectedMark.value ? 
-        // { lat: selectedMark.value.lat, lng: selectedMark.value.lng } : { lat: 23.97565, lng: 120.9738819 }
+    async function initMap() {
+      try { 
+        const centerVal = locaCenter.value
 
         map.value = new window.google.maps.Map(divRef.value, {
-          zoom: zoomVal,
+          zoom: 9,
           mapTypeId: 'terrain',
           center: centerVal,
           disableDefaultUI: false,
         })
 
-        positions.value.forEach((el) => {
-          const marker = new window.google.maps.Marker({
-            position: { lat: el.lat, lng: el.lng },
-            map: map.value
-          })
-
-          const infowindow = new window.google.maps.InfoWindow({
-            content: `
-            <div id="content">
-              <p class="infowindow">${el.name}</p>
-            </div>
-          `,
-            width: 200,
-          });
-
-          marker.addListener('click', () => {
-            const selected = positions.value.find((card) => card.id === el.id)
-            selectedMark.value = selected
-
-            if (infowindowVal.value) infowindowVal.value.close()
-            infowindow.open(map.value, marker)
-            infowindowVal.value = infowindow
-          });
-        })
+    
       } catch (error) {
         alert('地圖發生錯誤，請稍後再嘗試!')
         console.log(error)
@@ -409,25 +381,73 @@ export default {
     }
     getlocation()
 
-    function setlocation() {
-      if (locationVal.value == null) {
-        return
-      }
-
-      initMap(locationVal.value)
+    async function setlocation() {
+      resetCenter(locationVal.value)
+      initMap()
+      setMarker()
     }
 
+    function resetCenter(setPos = null) {
+      if(setPos) {
+        locaCenter.value = setPos
+      }else{
+        if(selectedCity.value) {
+          const city = cityData.find((city) => city.id == selectedCity.value)
+          locaCenter.value = city.center
+        }else{
+          locaCenter.value = { lat: 23.97565, lng: 120.9738 }
+        }
+      }
 
-    initPosition()
+    }
+
+    function deleteMarkers() {
+      markers.forEach(marker => marker.setMap(null))
+      markers = []
+    }
+
+    function setMarker() {
+      deleteMarkers()
+
+      positions.value.forEach((el) => {
+        const marker = new window.google.maps.Marker({
+          position: { lat: el.Position.PositionLat, lng: el.Position.PositionLon },
+          map: map.value
+        })
+
+        markers.push(marker)
+
+        const infowindow = new window.google.maps.InfoWindow({
+          content: `
+          <div id="content">
+            <p class="infowindow">${el.Name}</p>
+          </div>
+        `,
+          width: 200,
+        })
+
+        marker.addListener('click', () => {
+          const selected = positions.value.find((card) => card.ID === el.ID)
+          selectedMark.value = selected
+          isActiveID.value = selected.ID
+
+          if (infowindowVal.value) infowindowVal.value.close()
+          infowindow.open(map.value, marker)
+          infowindowVal.value = infowindow
+        });
+      })
+    }
 
     /* 撈取地圖資料結束 */
 
 
     /* 進階篩選開始 */
     async function submitForm() {
-      await goSearch(20)
+      await goSearch()
+      resetCenter()
+      initMap()
+      setMarker()
       selectedCity.value = null
-      enteredSearchTerm.value = ''
     }
 
     function updatedFilters(val) {
@@ -444,21 +464,15 @@ export default {
     function handleClose(val) {
       show.value = val
     }
-
     /* 進階篩選結束 */
-
-
-    onMounted(() => {
-      initMap()
-    })
 
     return {
       show,
       divRef,
+      isActiveID,
       enteredSearchTerm,
       storyDetailsLink,
       selectedType,
-      selectType,
       searchCards,
       selectedCard,
       curPage,
