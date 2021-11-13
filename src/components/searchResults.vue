@@ -54,7 +54,7 @@
         <li 
         v-for="(num, index) in numPages" 
         :key="index" 
-        :class="{ curPageStyle: num == curPage }"
+        :class="{ curPage: num == curPage }"
         @click="changePage(num)"
         >
         {{ num }}</li>

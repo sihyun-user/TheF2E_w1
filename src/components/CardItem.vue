@@ -1,8 +1,8 @@
 <template>
   <li class="card">
-    <div class="card__heart">
+    <!-- <div class="card__heart">
       <i class="far fa-heart"></i>
-    </div>
+    </div> -->
     <router-link :to="storyDetailsLink">
       <div class="card__pic">
         <img :src="picture" alt="card">

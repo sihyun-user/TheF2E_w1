@@ -5,7 +5,7 @@ export const RES_MAP_PAGE = 5
 export const TOP_DATA = 70
 
 export const RADOM_STORYNUM = 20 
-export const POPULAR_STORYNUM = 5
+export const POPULAR_STORYNUM = 6
 
 export const RADOM_PAGENUM = 20
 export const POPULAR_PAGENUM = 8

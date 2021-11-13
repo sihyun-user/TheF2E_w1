@@ -1,5 +1,5 @@
 <template>
-  <section class="scene">
+  <section class="typical">
     <div class="banner">
       <img src="@/assets/img/scene.jpg" alt="banner">
       <h1>必遊景點</h1>

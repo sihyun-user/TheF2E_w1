@@ -14,10 +14,10 @@
             <input type="radio" name="type" id="hotel" value="hotel" v-model="filterType">
             <label for="hotel">住宿</label>
             <input type="radio" name="type" id="scenicSpot" value="scenicSpot" v-model="filterType">
-            <label for="scenicSpot">觀光</label>
+            <label for="scenicSpot">景點</label>
           </div>
         </div>
-        <div class="filter__hot filter__wrap">
+        <!-- <div class="filter__hot filter__wrap">
           <h2 class="filter__title">熱門分類</h2>
           <div class="filter__items">
             <input type="checkbox" name="hot" id="hot-1" value="牛肉麵" v-model="filterHot">
@@ -25,7 +25,7 @@
             <input type="checkbox" name="hot" id="hot-2" value="海鮮" v-model="filterHot">
             <label for="hot-2">海鮮餐廳</label>
           </div>
-        </div>
+        </div> -->
         <div class="filter__city filter__wrap">
           <h2 class="filter__title">城市</h2>
           <ul class="filter__items">

@@ -180,7 +180,6 @@ export default {
       selectedType.value = val.type
       selectedCity.value = val.city
       enteredSearchTerm.value = val.keyword
-      console.log(val)
       submitForm()
     }
 

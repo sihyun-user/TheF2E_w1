@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import Home from './pages/Home.vue'
-import Attractions from './pages/Attractions.vue'
+import Typical from './pages/Typical.vue'
 import Stories from './pages/Stories.vue'
 import Story from './pages/Story.vue'
 import StoryMap from './pages/StoryMap.vue'
@@ -12,7 +12,7 @@ const router = createRouter({
   routes: [
     { path: '/', redirect: '/home' },
     { path: '/home', component: Home },
-    { path: '/scene', component: Attractions },
+    { path: '/typical', component: Typical },
     { path: '/stories', component: Stories},
     { path: '/stories/:storyId', props:true ,component: Story },
     { path: '/storymap', component: StoryMap },

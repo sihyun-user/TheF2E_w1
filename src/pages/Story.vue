@@ -30,7 +30,7 @@
           <div class="story__info--description">
             <h2 v-if="type == 'restaurant'">美食資訊</h2>
             <h2 v-else-if="type == 'hotel'">住宿資訊</h2>
-            <h2 v-else>觀光資訊</h2>
+            <h2 v-else>景點資訊</h2>
 
             <p v-if="story.Description">{{ story.Description }}</p>
             <p v-else>暫無描述資訊</p>
@@ -90,7 +90,7 @@
 <script>
 import { ref, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { useRoute, useRouter ,onBeforeRouteUpdate } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { RADOM_STORYNUM, POPULAR_STORYNUM } from '../config.js'
 export default {
   props: ['storyId'],
@@ -106,6 +106,7 @@ export default {
     const scenicSpot = computed(() => store.getters.scenicSpot)
     const restaurant = computed(() => store.getters.restaurant)
     const hotel = computed(() => store.getters.hotel)
+    const hot = computed(() => store.getters.hot)
 
     const type = computed(() => route.query.type)
 
@@ -157,21 +158,15 @@ export default {
       return pos
     })
     
-    const popular = computed(() => {
-      let popular = []
-      if(type.value == 'restaurant') {
-        popular = getPopular(restaurant.value)
-      }else if(type.value == 'hotel'){
-        popular = getPopular(hotel.value)
-      }else {
-        popular = getPopular(scenicSpot.value)
-      }
-
-      return popular
-    })
+    const popular = computed(() => getPopular())
     
     // 隨機抽取5個熱門項目
-    function getPopular(type) {
+    function getHotData() {
+      store.dispatch('setHot', type.value)
+    }
+    getHotData()
+
+    function getPopular() {
       let num = POPULAR_STORYNUM
       let radom = []
       for (let i = 0; i < RADOM_STORYNUM ; i++) {
@@ -185,16 +180,13 @@ export default {
       let popular = []
       for(let i = 0; i < num ; i++) {
         let num = radom[i]
-        popular.push(type[num])
+        popular.push(hot.value[num])
       }
       return popular
     }
 
     function changePicture(num) {
-    
       curimg.value += num
-
-      console.log(curimg.value)
     }
 
     function getStoryLink(id) {
@@ -219,7 +211,6 @@ export default {
       initMap()
     })
 
-    onBeforeRouteUpdate(() => {})
     
     return {
       curimg,

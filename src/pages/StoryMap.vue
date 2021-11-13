@@ -71,7 +71,7 @@
         </li>
         <li class="aside__type--3" v-else>
           <i class="fas fa-mountain"></i>
-          <span>觀光</span>
+          <span>景點</span>
         </li>
       </ul>
 
@@ -111,7 +111,7 @@
         <div class="aside__notFoundCards" v-if="searchCards.length == 0">
           <p v-if="selectedType == 'restaurant'">目前沒有美食資料，請重新查詢</p>
           <p v-else-if="selectedType == 'hotel'">目前沒有住宿資料，請重新查詢</p>
-          <p v-else>目前沒有觀光資料，請重新查詢</p>
+          <p v-else>目前沒有觀景點資料，請重新查詢</p>
         </div>
       </div>
 
@@ -138,7 +138,7 @@
           <li 
           v-for="(num, index) in numPages" 
           :key="index" 
-          :class="{ curPageStyle: num == curPage }"
+          :class="{ curPage: num == curPage }"
           @click="changePage(num)"
           >
           {{ num }}</li>
