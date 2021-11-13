@@ -370,7 +370,7 @@ export default {
         const centerVal = locaCenter.value
 
         map.value = new window.google.maps.Map(divRef.value, {
-          zoom: selectedCity.value ? 12 : 8,
+          zoom: selectedCity.value ? 11 : 8,
           mapTypeId: 'terrain',
           center: centerVal,
           disableDefaultUI: false,
