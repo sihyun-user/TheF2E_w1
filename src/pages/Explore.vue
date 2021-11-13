@@ -1,7 +1,7 @@
 <template>
   <section class="explore">
     <div class="explore__content">
-      <div class="info info__north" v-if="selectedmap == 'north'">
+      <div class="info info__north" v-show="selectedmap == 'north'">
         <div class="info__text info__text--north">
           <div class="info__text--wrap">
             <h1>北部地區</h1>
@@ -47,7 +47,7 @@
         </div>
       </div>
 
-      <div class="info info__center" v-else-if="selectedmap == 'center'">
+      <div class="info info__center" v-show="selectedmap == 'center'">
         <div class="info__text info__text--center">
           <div class="info__text--wrap">
             <h1>中部地區</h1>
@@ -85,7 +85,7 @@
         </div>
       </div>
 
-      <div class="info info__south" v-else-if="selectedmap == 'south'">
+      <div class="info info__south" v-show="selectedmap == 'south'">
         <div class="info__text info__text--south">
           <div class="info__text--wrap">
             <h1>南部地區</h1>
@@ -126,7 +126,7 @@
         </div>
       </div>
 
-      <div class="info info__east" v-else-if="selectedmap == 'east'">
+      <div class="info info__east" v-show="selectedmap == 'east'">
         <div class="info__text info__text--east">
           <div class="info__text--wrap">
             <h1>東部地區</h1>
@@ -155,7 +155,7 @@
         </div>
       </div>
 
-      <div class="info info__island" v-else>
+      <div class="info info__island" v-show="selectedmap == 'island'">
         <div class="info__text info__text--island">
           <div class="info__text--wrap">
             <h1>離島地區</h1>
@@ -188,11 +188,11 @@
       </div>
 
       <div class="map">
-        <img src="@/assets/img/map01.png" v-if="selectedmap == 'north'">
-        <img src="@/assets/img/map02.png" v-else-if="selectedmap == 'center'">
-        <img src="@/assets/img/map03.png" v-else-if="selectedmap == 'south'">
-        <img src="@/assets/img/map04.png" v-else-if="selectedmap == 'east'">
-        <img src="@/assets/img/map05.png" v-else>
+        <img src="@/assets/img/map01.png" v-show="selectedmap == 'north'">
+        <img src="@/assets/img/map02.png" v-show="selectedmap == 'center'">
+        <img src="@/assets/img/map03.png" v-show="selectedmap == 'south'">
+        <img src="@/assets/img/map04.png" v-show="selectedmap == 'east'">
+        <img src="@/assets/img/map05.png" v-show="selectedmap == 'island'">
 
         <div class="map__btns">
           <div class="map__btns--north">
