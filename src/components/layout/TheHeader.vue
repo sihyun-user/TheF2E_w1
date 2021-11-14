@@ -47,7 +47,7 @@
       <div class="menu" v-show="isactive">
         <ul class="menu__links">
           <li :class="{ active: this.$route.path = '/stories' }">
-            <router-link to="/">探索台灣</router-link>
+            <router-link to="/stories">探索台灣</router-link>
           </li>
           <li :class="{ active: this.$route.path = '/storymap' }">
             <router-link to="/storymap">旅遊地圖</router-link>
