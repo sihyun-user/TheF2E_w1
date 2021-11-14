@@ -4,15 +4,24 @@
       <div class="results__block"></div>
       <div class="results__cardBox">
         <div class="results__titleBox">
-          <h2 v-if="selectedType === 'scenicSpot'" class="results__title results__title--1">熱門景點</h2>
-          <h2 v-else-if="selectedType === 'restaurant'" class="results__title results__title--2">必吃美食</h2>
-          <h2 v-else class="results__title results__title--3">優質住宿</h2>
+          <h2 v-if="selectedType === 'scenicSpot'" class="results__title results__title--1">
+            <span>熱門景點</span>
+            <i class="fas fa-mountain"></i>
+          </h2>
+          <h2 v-else-if="selectedType === 'restaurant'" class="results__title results__title--2">
+            <span>必吃美食</span>
+            <i class="fas fa-utensils"></i>
+          </h2>
+          <h2 v-else class="results__title results__title--3">
+            <span>優質住宿</span>
+            <i class="fas fa-car"></i>
+          </h2>
         </div>
 
-        <ul class="results__marks">
+        <!-- <ul class="results__marks">
           <li>夜市</li>
           <li>中壢區</li>
-        </ul>
+        </ul> -->
 
         <ul class="results__cards">
           <card-item
@@ -116,6 +125,7 @@ export default {
     const curPage = ref(1)
     const pageResults = ref(null)
     const pageVal = ref(3)
+    const isLoading = ref(false)
 
     const numPages = computed(() => Math.ceil(selected.value.length / resultsPerPage))
 
@@ -148,18 +158,13 @@ export default {
 
     watch(selected, () => {
       selectedType.value = type.value
+      curPage.value = 1
       setPageResults(1)
     })
 
     watch(curPage, () => {
       calPage()
       setPageResults(curPage.value)
-    })
-
-    watch(selectedType , (newVal) => {
-      if(newVal == selectedType.value) {
-        curPage.value = 1
-      }
     })
 
     setPageResults(1)
@@ -171,7 +176,8 @@ export default {
       pageResults,
       goto,
       changePage,
-      pageVal
+      pageVal,
+      isLoading
     }
   }
 }

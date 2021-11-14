@@ -12,6 +12,7 @@ const app = createApp(App)
 
 app.use(store)
 app.use(router)
+app.use(window.VueAwesomeSwiper)
 
 app.component('base-spinner', BaseSpinner)
 

@@ -150,13 +150,12 @@
         border: 1px solid #AEAEAE;
         border-radius: 100px;
         margin-right: 12px;
-        // cursor: pointer;
 
-        // &:hover {
-        //   color: $color-white;
-        //   background-color: $color-orange;
-        //   border: 1px solid transparent;
-        // }
+
+        @include mobile {
+          width: 100px;
+          margin-right: 5px;
+        }
       }
 
       & ul {

@@ -12,7 +12,7 @@
             >
               <i class="fas fa-chevron-left"></i>
             </button>
-            <img :src="story.Picture[pic]">
+            <img :src="story.Picture[pic]" @error="$event.target.src='https://redthread.uoregon.edu/files/original/affd16fd5264cab9197da4cd1a996f820e601ee4.png'">
             <button 
             class="story__imgs-btn story__imgs-btn--next" 
             @click="changePicture(+1)"
@@ -75,7 +75,7 @@
             <ul>
               <li v-for="pop in popular" :key="pop.ID">
                 <router-link to="" @click="getStoryLink(pop.ID)">
-                  <img :src="pop.Picture.PictureUrl1">
+                  <img :src="pop.Picture.PictureUrl1" @error="$event.target.src='https://redthread.uoregon.edu/files/original/affd16fd5264cab9197da4cd1a996f820e601ee4.png'">
                   <h3>{{ pop.Name }}</h3>
                 </router-link>
               </li>

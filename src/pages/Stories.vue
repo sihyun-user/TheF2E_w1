@@ -7,6 +7,7 @@
       </div>
       <h1>搜尋台灣</h1> 
 
+
       <section class="form">
         <div class="form__search">
           <input type="search" @input="enterSearch" :value="enteredSearchTerm" placeholder="請輸入關鍵字" />
@@ -36,18 +37,25 @@
     </div>
 
     <div class="main" v-if="!isSearch">
-      <div class="main__container">
+      <div v-if="isLoading">
+        <base-spinner></base-spinner>
+      </div>
+
+      <div class="main__container" v-else>
         <div class="main__wrap">
-        <h2 class="main__title main__title--1">熱門景點</h2>
+        <h2 class="main__title main__title--1">
+          <span>熱門景點</span>
+          <i class="fas fa-mountain"></i>
+        </h2>
         <ul class="main__cards">
           <card-item
-          v-for="pop in popular.scenicSpot"
-          :key="pop.ID"
-          :id="pop.ID"
-          :name="pop.Name"
-          :address="pop.Address"
-          :phone="pop.Phone"
-          :picture="pop.Picture.PictureUrl1"
+          v-for="hot in hotScenicSpot"
+          :key="hot.ID"
+          :id="hot.ID"
+          :name="hot.Name"
+          :address="hot.Address"
+          :phone="hot.Phone"
+          :picture="hot.Picture.PictureUrl1"
           type="scenicSpot"
           >
           </card-item>
@@ -55,16 +63,19 @@
         </div>
 
         <div class="main__wrap">
-          <h2 class="main__title main__title--2">必吃美食</h2>
+          <h2 class="main__title main__title--2">
+            <span>必吃美食</span>
+            <i class="fas fa-utensils"></i>
+          </h2>
           <ul class="main__cards">
             <card-item
-            v-for="pop in popular.restaurant"
-            :key="pop.ID"
-            :id="pop.ID"
-            :name="pop.Name"
-            :address="pop.Address"
-            :phone="pop.Phone"
-            :picture="pop.Picture.PictureUrl1"
+            v-for="hot in hotRestaurant"
+            :key="hot.ID"
+            :id="hot.ID"
+            :name="hot.Name"
+            :address="hot.Address"
+            :phone="hot.Phone"
+            :picture="hot.Picture.PictureUrl1"
             type="restaurant"
             >
             </card-item> 
@@ -72,16 +83,19 @@
         </div>
 
         <div class="main__wrap">
-          <h2 class="main__title main__title--3">優質住宿</h2>
+          <h2 class="main__title main__title--3">
+            <span>優質住宿</span>
+            <i class="fas fa-car"></i>
+          </h2>
           <ul class="main__cards">
             <card-item
-            v-for="pop in popular.hotel"
-            :key="pop.ID"
-            :id="pop.ID"
-            :name="pop.Name"
-            :address="pop.Address"
-            :phone="pop.Phone"
-            :picture="pop.Picture.PictureUrl1"
+            v-for="hot in hotHotel"
+            :key="hot.ID"
+            :id="hot.ID"
+            :name="hot.Name"
+            :address="hot.Address"
+            :phone="hot.Phone"
+            :picture="hot.Picture.PictureUrl1"
             type="hotel"
             >
             </card-item>
@@ -89,6 +103,7 @@
         </div>
       </div>
     </div>
+    
 
     <search-results v-else :selected="finalSearch" :type="selectedType"></search-results>
 
@@ -118,6 +133,10 @@ export default {
     const finalSearch = ref(null)
     const enteredSearchTerm = ref('')
     const show = ref(false)
+    const isLoading =ref(null)
+    const hotHotel = ref(null)
+    const hotScenicSpot = ref(null)
+    const hotRestaurant = ref(null)
 
     const scenicSpot = computed(() => store.getters.scenicSpot)
     const restaurant = computed(() => store.getters.restaurant)
@@ -137,6 +156,14 @@ export default {
           await store.dispatch('setRestaurant', selectedCity.value)
         } else if (selectedType.value === 'hotel') {
           await store.dispatch('setHotel', selectedCity.value)
+        }
+      }else {
+        if (selectedType.value === 'scenicSpot') {
+          await store.dispatch('setScenicSpot', null)
+        } else if (selectedType.value === 'restaurant') {
+          await store.dispatch('setRestaurant', null)
+        } else if (selectedType.value === 'hotel') {
+          await store.dispatch('setHotel', null)
         }
       }
 
@@ -167,20 +194,16 @@ export default {
       }
 
       isSearch.value = true
-      finalSearch.value = data
-    }
-
-    async function submitForm() {
-      await goSearch()
       selectedCity.value = null
       enteredSearchTerm.value = ''
+      finalSearch.value = data
     }
 
     function updatedFilters(val) {
       selectedType.value = val.type
       selectedCity.value = val.city
       enteredSearchTerm.value = val.keyword
-      submitForm()
+      goSearch()
     }
 
     function handleShow() {
@@ -192,14 +215,11 @@ export default {
     }
 
     /* 抽取熱門項目開始 */
-    const popular = computed(() => {
-      let popular = {}
-      popular.restaurant = getPopular(restaurant.value)
-      popular.hotel = getPopular(hotel.value)
-      popular.scenicSpot = getPopular(scenicSpot.value)
-
-      return popular
-    })
+    function setPopular() {
+      hotRestaurant.value = getPopular(restaurant.value)
+      hotHotel.value = getPopular(hotel.value)
+      hotScenicSpot.value = getPopular(scenicSpot.value)
+    }
     
     // 隨機抽取8個熱門項目
     function getPopular(type) {
@@ -222,10 +242,18 @@ export default {
     }
     /* 抽取熱門項目結束 */
 
-    function getData() {
-      store.dispatch('setScenicSpot', null)
-      store.dispatch('setRestaurant', null)
-      store.dispatch('setHotel', null)
+    async function getData() {
+      isLoading.value = true
+      try {
+        await store.dispatch('setScenicSpot', null)
+        await store.dispatch('setRestaurant', null)
+        await store.dispatch('setHotel', null)
+
+        setPopular()
+      } catch (error) {
+        console.log(error)
+      }
+      isLoading.value = false
     }
     
     getData()
@@ -242,12 +270,14 @@ export default {
       hotel,
       goSearch,
       getData,
-      popular,
       enterSearch,
       updatedFilters,
       handleShow,
       handleClose,
-      submitForm
+      isLoading,
+      hotRestaurant,
+      hotHotel,
+      hotScenicSpot
     }
   }
 }

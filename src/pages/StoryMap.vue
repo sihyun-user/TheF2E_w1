@@ -7,7 +7,7 @@
           <i class="fas fa-times"></i>
         </div>
         <div class="card__pic">
-          <img :src="selectedMark.Picture.PictureUrl1" alt="card">
+          <img :src="selectedMark.Picture.PictureUrl1" @error="$event.target.src='https://redthread.uoregon.edu/files/original/affd16fd5264cab9197da4cd1a996f820e601ee4.png'" alt="card">
         </div>
         <div class="card__content">
           <div class="card__title">
@@ -77,7 +77,11 @@
 
       <span class="aside__infonum">共有{{ searchCards.length }}筆資料</span>
 
-      <div class="aside__cardWrap">
+      <div v-if="isLoading">
+        <base-spinner></base-spinner>
+      </div>
+
+      <div class="aside__cardWrap" v-else>
         <ul>
           <li 
           v-for="res in pageResults"
@@ -91,7 +95,7 @@
           { cardSide3: selectedType == 'scenicSpot' }
           ]"
           >
-            <img :src="res.Picture.PictureUrl1">
+            <img :src="res.Picture.PictureUrl1" @error="$event.target.src='https://redthread.uoregon.edu/files/original/affd16fd5264cab9197da4cd1a996f820e601ee4.png'">
             <div class="aside__card-content">
               <h1>{{ res.Name }}</h1>
               <div class="aside__card-phone">
@@ -221,6 +225,7 @@ export default {
     const locaCenter = ref()
     const positions = ref(null)
     const isActiveID = ref(false)
+    const isLoading = ref(false)
     let markers = []
 
     const scenicSpot = computed(() => store.getters.scenicSpot)
@@ -238,19 +243,6 @@ export default {
 
     async function goSearch() {
       let data = []
-
-      if(selectedCity.value) {
-        if (selectedType.value === 'scenicSpot') {
-          await store.dispatch('setScenicSpot', selectedCity.value)
-          positions.value = scenicSpot.value
-        } else if (selectedType.value === 'restaurant') {
-          await store.dispatch('setRestaurant', selectedCity.value)
-          positions.value = restaurant.value
-        } else if (selectedType.value === 'hotel') {
-          await store.dispatch('setHotel', selectedCity.value)
-          positions.value = hotel.value
-        }
-      }
 
       if(enteredSearchTerm.value) {
         if (selectedType.value === 'scenicSpot') {
@@ -333,8 +325,6 @@ export default {
     watch(selectedType , (newVal) => {
       if(newVal == selectedType.value) {
         curPage.value = 1
-        selectedMark.value = null
-        goSearch()
         setPageResults(curPage.value)
       }
     })
@@ -347,21 +337,28 @@ export default {
     /* 抓取頁數結束 */
 
     async function getData() {
-      if (selectedType.value === 'scenicSpot') {
-        await store.dispatch('setScenicSpot', null)
-        positions.value = scenicSpot.value
-      } else if (selectedType.value === 'restaurant') {
-        await store.dispatch('setRestaurant', null)
-        positions.value = restaurant.value
-      } else if (selectedType.value === 'hotel') {
-        await store.dispatch('setHotel', null)
-        positions.value = hotel.value
+      isLoading.value = true
+      try {
+        if (selectedType.value === 'scenicSpot') {
+          await store.dispatch('setScenicSpot', null)
+          positions.value = scenicSpot.value
+        } else if (selectedType.value === 'restaurant') {
+          await store.dispatch('setRestaurant', null)
+          positions.value = restaurant.value
+        } else if (selectedType.value === 'hotel') {
+          await store.dispatch('setHotel', null)
+          positions.value = hotel.value
+        }
+      } catch (error) {
+        console.log(error)
       }
 
       resetCenter()
       initMap()
       setMarker()
+      isLoading.value = false
     }
+
     getData()
 
     /* 撈取地圖資料開始 */
@@ -467,7 +464,20 @@ export default {
 
     /* 進階篩選開始 */
     async function submitForm() {
-      await goSearch()
+      if(selectedCity.value) {
+        if (selectedType.value === 'scenicSpot') {
+          await store.dispatch('setScenicSpot', selectedCity.value)
+          positions.value = scenicSpot.value
+        } else if (selectedType.value === 'restaurant') {
+          await store.dispatch('setRestaurant', selectedCity.value)
+          positions.value = restaurant.value
+        } else if (selectedType.value === 'hotel') {
+          await store.dispatch('setHotel', selectedCity.value)
+          positions.value = hotel.value
+        }
+      }
+
+      goSearch()
       resetCenter()
       initMap()
       setMarker()
@@ -506,12 +516,14 @@ export default {
       goto,
       changePage,
       enterSearch,
-      goSearch,
       selectedMark,
       updatedFilters,
       handleShow,
       handleClose,
       setlocation,
+      submitForm,
+      goSearch,
+      isLoading
     }
   }
 }

@@ -4,8 +4,8 @@
       <i class="far fa-heart"></i>
     </div> -->
     <router-link :to="storyDetailsLink">
-      <div class="card__pic">
-        <img :src="picture" alt="card">
+      <div class="card__pic" v-if="picture">
+        <img :src="picture" alt="card" @error="$event.target.src='https://redthread.uoregon.edu/files/original/affd16fd5264cab9197da4cd1a996f820e601ee4.png'">
       </div>
       <div class="card__content">
         <div class="card__title">

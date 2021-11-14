@@ -236,7 +236,7 @@
       font-weight: $bold;
       margin-bottom: 15px;
 
-      &::before {
+      & span::before {
         content: '|';
         color: transparent;
         display: inline-block;
@@ -245,16 +245,39 @@
         margin-right: 5px;
       }
 
-      &--1::before {
-        background-color: $color-purple;
+      & i {
+        font-size: 36px;
+        margin-left: 15px;
       }
 
-      &--2::before {
-        background-color: $color-orange;
+      &--1 {
+        & i {
+          color: $color-purple;
+        }
+
+        & span::before {
+          background-color: $color-purple;
+        }
       }
 
-      &--3::before {
-        background-color: $color-green;
+      &--2 {
+        & i {
+          color: $color-orange;
+        }
+
+        & span::before {
+          background-color: $color-orange;
+        }
+      }
+
+      &--3 {
+        & i {
+          color: $color-green;
+        }
+
+        & span::before {
+          background-color: $color-green;
+        }
       }
     }
 
@@ -321,9 +344,9 @@
     &__title {
       font-size: 24px;
       font-weight: $bold;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
   
-      &::before {
+      & span::before {
         content: '|';
         color: transparent;
         display: inline-block;
@@ -332,16 +355,39 @@
         margin-right: 5px;
       }
   
-      &--1::before {
-        background-color: $color-purple;
+      & i {
+        font-size: 36px;
+        margin-left: 15px;
       }
   
-      &--2::before {
-        background-color: $color-orange;
+      &--1 {
+        & i {
+          color: $color-purple;
+        }
+  
+        & span::before {
+          background-color: $color-purple;
+        }
       }
   
-      &--3::before {
-        background-color: $color-green;
+      &--2 {
+        & i {
+          color: $color-orange;
+        }
+  
+        & span::before {
+          background-color: $color-orange;
+        }
+      }
+  
+      &--3 {
+        & i {
+          color: $color-green;
+        }
+  
+        & span::before {
+          background-color: $color-green;
+        }
       }
     }
   

@@ -15,9 +15,9 @@
               <i class="fas fa-search"></i>
             </router-link>
           </div>
-          <div class="menu__tools-heart">
+          <!-- <div class="menu__tools-heart">
             <i class="far fa-heart"></i>
-          </div>
+          </div> -->
         </div>
       </ul>
     </nav>
@@ -39,9 +39,9 @@
             <i class="fas fa-search"></i>
           </router-link>
         </div>
-        <div class="tools__heart">
+        <!-- <div class="tools__heart">
           <i class="far fa-heart"></i>
-        </div>
+        </div> -->
       </div>
 
       <div class="menu" v-show="isactive">
