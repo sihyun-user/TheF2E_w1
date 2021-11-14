@@ -1,5 +1,8 @@
 <template>
-  <section class="story">
+  <div class="loding" v-if="isLoading">
+    <base-spinner></base-spinner>
+  </div>
+  <section class="story" v-else>
     <div class="story__banner">
       <h1 class="story__title">{{ story.Name }}</h1>
       <div class="story__imgs">
@@ -12,7 +15,7 @@
             >
               <i class="fas fa-chevron-left"></i>
             </button>
-            <img :src="story.Picture[pic]" @error="$event.target.src='https://redthread.uoregon.edu/files/original/affd16fd5264cab9197da4cd1a996f820e601ee4.png'">
+            <img :src="story.Picture[pic]">
             <button 
             class="story__imgs-btn story__imgs-btn--next" 
             @click="changePicture(+1)"
@@ -65,7 +68,6 @@
           </div>
         </div>
         <div class="story__side">
-          <div class="story__side--map" ref="divRef"></div>
           <div class="story__side--hot">
             <div class="story__side--hot-title">
               <h2 v-if="type == 'restaurant'">熱門美食</h2>
@@ -74,10 +76,10 @@
             </div>
             <ul>
               <li v-for="pop in popular" :key="pop.ID">
-                <router-link to="" @click="getStoryLink(pop.ID)">
-                  <img :src="pop.Picture.PictureUrl1" @error="$event.target.src='https://redthread.uoregon.edu/files/original/affd16fd5264cab9197da4cd1a996f820e601ee4.png'">
+                <div @click="getStoryLink(pop.ID)">
+                  <img :src="pop.Picture.PictureUrl1">
                   <h3>{{ pop.Name }}</h3>
-                </router-link>
+                </div>
               </li>
             </ul>
           </div>
@@ -88,40 +90,31 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
-import { RADOM_STORYNUM, POPULAR_STORYNUM } from '../config.js'
+
+import { RADOM_STORYNUM, POPULAR_STORYNUM, API_URL, FILTER_PIC } from '../config.js'
+import getAuthorizationHeader from '../helpers.js'
 export default {
   props: ['storyId'],
   setup(props) {
     const store = useStore()
     const route = useRoute()
     const router = useRouter()
-    const map = ref(null)
-    const marker = ref(null)
-    const divRef = ref(null)
     const curimg = ref(0)
+    const isLoading = ref(null)
+    const pageVal = ref(ref)
+    const story = ref(null)
 
-    const scenicSpot = computed(() => store.getters.scenicSpot)
-    const restaurant = computed(() => store.getters.restaurant)
-    const hotel = computed(() => store.getters.hotel)
     const hot = computed(() => store.getters.hot)
 
     const type = computed(() => route.query.type)
 
-    const story = computed(() => {
-      let story = []
-      if(type.value == 'restaurant') {
-        story = restaurant.value.find(item => item.ID === props.storyId)
-      }else if(type.value == 'hotel'){
-        story = hotel.value.find(item => item.ID === props.storyId)
-      }else {
-        story = scenicSpot.value.find(item => item.ID === props.storyId)
-      }
 
-      return story
-    })
+    function getStory() {
+      story.value = pageVal.value.find(item => item.ID === props.storyId)
+    }
 
     const picture = computed(() => {
       let imgs = []
@@ -147,15 +140,6 @@ export default {
         marks.push(`Class${i}`)
       }
       return marks
-    })
-    
-    const position = computed(() => {
-      let pos = {
-        lat: story.value.Position.PositionLat,
-        lng: story.value.Position.PositionLon
-      }
-
-      return pos
     })
     
     const popular = computed(() => getPopular())
@@ -190,40 +174,71 @@ export default {
     }
 
     function getStoryLink(id) {
-      router.push(`/stories/${id}?type=${type.value}`)
-    }
-    
-    function initMap() {
-      map.value = new window.google.maps.Map(divRef.value, {
-        zoom:  16,
-        mapTypeId: 'terrain',
-        center: position.value,
-        disableDefaultUI: false,
-      })
-
-      marker.value = new window.google.maps.Marker({
-        position: position.value,
-        map: map.value
-      })
+      let val = pageVal.value.find(item => item.ID === id)
+      router.push(`/stories/${val.ID}?type=${type.value}`)
+      getData()
     }
 
-    onMounted(() => {
-      initMap()
-    })
+    async function getData() {
+      isLoading.value = true
+      try {
+        if (type.value === 'scenicSpot') {
+          await setPage('scenicSpot')
+        } else if (type.value === 'restaurant') {
+          await setPage('restaurant')
+        } else if (type.value === 'hotel') {
+          await setPage('hotel')
+        }
+      } catch (error) {
+        console.log(error)
+      }
+      getStory()
+      isLoading.value = false
+    }
 
+    async function setPage(type) {
+      let API
+      if(type == 'restaurant') {
+        API = `${API_URL}/v2/Tourism/Restaurant?$format=JSON&${FILTER_PIC}`
+      }else if(type == 'hotel') {
+        API = `${API_URL}/v2/Tourism/Hotel?&$format=JSON&${FILTER_PIC}`
+      }else {
+        API = `${API_URL}/v2/Tourism/ScenicSpot?$format=JSON&${FILTER_PIC}`
+      }
+      const response = await fetch(API, {
+        headers: getAuthorizationHeader()
+      })
+
+      if(!response.ok) {
+        alert('取得熱門資料失敗')
+      }
+      
+      const responseData = await response.json()
+
+      pageVal.value = responseData
+    }
+
+    getData()
+  
     
     return {
       curimg,
-      divRef,
       story,
       type,
       popular,
       getStoryLink,
       picture,
       markClass,
-      changePicture
+      changePicture,
+      isLoading
     }
 
   }
 }
 </script>
+
+<style scoped>
+.loding {
+  height: 100vh !important;
+}
+</style>

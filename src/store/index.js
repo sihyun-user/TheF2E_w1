@@ -84,11 +84,11 @@ const store = createStore({
     async setHot(context, type) {
       let API
       if(type == 'restaurant') {
-        API = `${API_URL}/v2/Tourism/Restaurant?$top=${TOP_DATA}&$format=JSON&${FILTER_PIC}`
+        API = `${API_URL}/v2/Tourism/Restaurant?$top=100&$format=JSON&${FILTER_PIC}`
       }else if(type == 'hotel') {
-        API = `${API_URL}/v2/Tourism/Hotel?$top=${TOP_DATA}&$format=JSON&${FILTER_PIC}`
+        API = `${API_URL}/v2/Tourism/Hotel?$top=100&$format=JSON&${FILTER_PIC}`
       }else {
-        API = `${API_URL}/v2/Tourism/ScenicSpot?$top=${TOP_DATA}&$format=JSON&${FILTER_PIC}`
+        API = `${API_URL}/v2/Tourism/ScenicSpot?$format=JSON&${FILTER_PIC}`
       }
 
       const response = await fetch(API, {
@@ -102,6 +102,28 @@ const store = createStore({
       const responseData = await response.json()
 
       context.commit('setHot', responseData)
+    },
+    async setPage(type) {
+      let API
+      if(type == 'restaurant') {
+        API = `${API_URL}/v2/Tourism/Restaurant?$format=JSON&${FILTER_PIC}`
+      }else if(type == 'hotel') {
+        API = `${API_URL}/v2/Tourism/Hotel?&$format=JSON&${FILTER_PIC}`
+      }else {
+        API = `${API_URL}/v2/Tourism/ScenicSpot?$format=JSON&${FILTER_PIC}`
+      }
+
+      const response = await fetch(API, {
+        headers: getAuthorizationHeader()
+      })
+
+      if(!response.ok) {
+        alert('取得熱門資料失敗')
+      }
+      
+      const responseData = await response.json()
+
+      return responseData
     }
   },
   getters: {

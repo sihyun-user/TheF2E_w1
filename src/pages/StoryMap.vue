@@ -188,7 +188,7 @@
       </div>
     </div>
 
-    <search-filter v-show="show" @update-filter="updatedFilters" @close="handleClose"></search-filter>
+    <search-filter class="search-filter" v-show="show" :show-Keyword="false" @update-filter="updatedFilters" @close="handleClose"></search-filter>
   </section>
   <div v-show="show" class="mask"></div>
   <div v-show="selectedMark" class="cardmask"></div>
@@ -528,3 +528,4 @@ export default {
   }
 }
 </script>
+

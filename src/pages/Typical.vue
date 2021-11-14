@@ -110,7 +110,7 @@
             </div>
           </div>
 
-          <div class="typical__top" v-if="type == 'restaurant'">
+          <div class="typical__top" v-else-if="type == 'restaurant'">
             <div class="typical__top--img">
               <router-link to="/stories/C3_315081100H_000592?type=restaurant">
                 <h3>膨鼠紅茶</h3>

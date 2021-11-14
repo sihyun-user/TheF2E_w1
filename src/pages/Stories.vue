@@ -107,7 +107,7 @@
 
     <search-results v-else :selected="finalSearch" :type="selectedType"></search-results>
 
-    <search-filter v-show="show" @update-filter="updatedFilters" @close="handleClose"></search-filter>
+    <search-filter v-show="show" :show-Keyword="true" @update-filter="updatedFilters" @close="handleClose"></search-filter>
   </section>
   <div v-show="show" class="mask"></div>
 </template>

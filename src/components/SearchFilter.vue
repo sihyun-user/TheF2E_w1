@@ -2,9 +2,9 @@
   <div v-show="show" class="filter">
     <div class="filter__content">
       <div class="filter__block">
-        <div class="filter__keyword">
-        <i class="fas fa-search"></i>
-        <input type="text" placeholder="請輸入關鍵字" v-model="keyword"/>
+        <div class="filter__keyword" v-if="showKeyword">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="請輸入關鍵字" v-model="keyword"/>
         </div>
         <div class="filter__type filter__wrap">
           <h2 class="filter__title">類別</h2>
@@ -49,6 +49,7 @@
 import { ref } from 'vue'
 import CITY_DATA from '../city-data.js'
 export default {
+  props: ['show-Keyword'],
   emits: ['update-filter', 'close'],
   setup(_,context) {
     const cityData = CITY_DATA
