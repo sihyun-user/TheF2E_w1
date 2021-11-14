@@ -267,7 +267,7 @@ export default {
     const restaurant = computed(() => store.getters.restaurant)
     const hotel = computed(() => store.getters.hotel)
 
-    const numPages = computed(() => Math.ceil(hotel.value.length / typicalPerPage))
+    const numPages = computed(() => Math.ceil(selected.value.length / typicalPerPage))
     const type = computed(() => route.query.type)
 
     function calPage() {

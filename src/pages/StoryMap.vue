@@ -221,7 +221,7 @@ export default {
     const infowindowVal = ref(null)
     const selectedCity = ref(null)
     const show = ref(false)
-    const locationVal = ref(null)
+    // const locationVal = ref(null)
     const locaCenter = ref()
     const positions = ref(null)
     const isActiveID = ref(false)
@@ -352,10 +352,11 @@ export default {
       } catch (error) {
         console.log(error)
       }
-
+      
       resetCenter()
       initMap()
       setMarker()
+      goSearch()
       isLoading.value = false
     }
 
@@ -378,34 +379,6 @@ export default {
         alert('地圖發生錯誤，請稍後再嘗試!')
         console.log(error)
       }
-    }
-
-    function getlocation() {
-      if(navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(success, error)
-      } else {
-        alert('你的裝置不支援地理位置功能。')
-      }
-
-      function error() {
-        alert('無法取得你的地理位置')
-      }
-
-      function success(position) {
-        const location = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        }
-
-        locationVal.value = location
-      }
-    }
-    getlocation()
-
-    async function setlocation() {
-      resetCenter(locationVal.value)
-      initMap()
-      setMarker()
     }
 
     function resetCenter(setPos = null) {
@@ -520,7 +493,6 @@ export default {
       updatedFilters,
       handleShow,
       handleClose,
-      setlocation,
       submitForm,
       goSearch,
       isLoading
