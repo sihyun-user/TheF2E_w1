@@ -10,7 +10,7 @@
         </div>
 
         <button class="btn btn--north">
-          <router-link to="/storymap">深入探索</router-link>
+          <router-link to="/stories">深入探索</router-link>
         </button>
 
         <div class="info__cities">
@@ -56,7 +56,7 @@
         </div>
 
         <button class="btn btn--center">
-          <router-link to="/storymap">深入探索</router-link>
+          <router-link to="/stories">深入探索</router-link>
         </button>
 
         <div class="info__cities">
@@ -97,7 +97,7 @@
         </div>
 
         <button class="btn btn--south">
-          <router-link to="/storymap">深入探索</router-link>
+          <router-link to="/stories">深入探索</router-link>
         </button>
 
         <div class="info__cities">
@@ -138,7 +138,7 @@
         </div>
 
         <button class="btn btn--east">
-          <router-link to="/storymap">深入探索</router-link>
+          <router-link to="/stories">深入探索</router-link>
         </button>
 
         <div class="info__cities">
@@ -166,7 +166,7 @@
         </div>
 
         <button class="btn btn--island">
-          <router-link to="/storymap">深入探索</router-link>
+          <router-link to="/stories">深入探索</router-link>
         </button>
 
         <div class="info__cities">

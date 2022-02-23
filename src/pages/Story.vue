@@ -215,7 +215,64 @@ export default {
       
       const responseData = await response.json()
 
-      pageVal.value = responseData
+      let datas = []
+      if(type == 'restaurant') {
+        for(const res of responseData) {
+          let data = {
+            ID: res.RestaurantID,
+            Name: res.RestaurantName,
+            Address: res.Address,
+            Phone: res.Phone,
+            Picture: res.Picture,
+            Class: res.Class,
+            Class1: res.Class1,
+            Class2: res.Class2,
+            Position: res.Position,
+            OpenTime: res.OpenTime,
+            Description: res.Description
+          }
+  
+          datas.push(data)
+        }
+      }else if(type == 'hotel') {
+        for(const res of responseData) {
+          let data = {
+            ID: res.HotelID,
+            Name: res.HotelName,
+            Address: res.Address,
+            Phone: res.Phone,
+            Picture: res.Picture,
+            Class: res.Class,
+            Class1: res.Class1,
+            Class2: res.Class2,
+            Position: res.Position,
+            OpenTime: res.OpenTime,
+            Description: res.Description
+          }
+  
+          datas.push(data)
+        }
+      }else {
+        for(const res of responseData) {
+          let data = {
+            ID: res.ScenicSpotID,
+            Name: res.ScenicSpotName,
+            Address: res.Address,
+            Phone: res.Phone,
+            Picture: res.Picture,
+            Class: res.Class,
+            Class1: res.Class1,
+            Class2: res.Class2,
+            Position: res.Position,
+            OpenTime: res.OpenTime,
+            Description: res.Description
+          }
+  
+          datas.push(data)
+        }
+      }
+
+      pageVal.value = datas
     }
 
     getData()

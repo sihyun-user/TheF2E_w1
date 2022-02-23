@@ -46,7 +46,25 @@ const store = createStore({
       const responseData = await response.json()
       // console.log(responseData)
 
-      context.commit('setScenicSpot', responseData)
+      let datas = []
+
+      for(const res of responseData) {
+        let data = {
+          ID: res.ScenicSpotID,
+          Name: res.ScenicSpotName,
+          Address: res.Address,
+          Phone: res.Phone,
+          Picture: res.Picture,
+          Class: res.Class,
+          Position: res.Position,
+          OpenTime: res.OpenTime,
+          Description: res.Description
+        }
+
+        datas.push(data)
+      }
+
+      context.commit('setScenicSpot', datas)
     },
     async setRestaurant(context, city) {
       const API = !city ? `${API_URL}/v2/Tourism/Restaurant?$top=${TOP_DATA}&$format=JSON&${FILTER_PIC}`  
@@ -60,10 +78,29 @@ const store = createStore({
         alert('取得餐飲資料失敗')
       }
 
+
       const responseData = await response.json()
       // console.log(responseData)
 
-      context.commit('setRestaurant', responseData)
+      let datas = []
+
+      for(const res of responseData) {
+        let data = {
+          ID: res.RestaurantID,
+          Name: res.RestaurantName,
+          Address: res.Address,
+          Phone: res.Phone,
+          Picture: res.Picture,
+          Class: res.Class,
+          Position: res.Position,
+          OpenTime: res.OpenTime,
+          Description: res.Description
+        }
+
+        datas.push(data)
+      }
+
+      context.commit('setRestaurant', datas)
     },
     async setHotel(context, city) {
       const API = !city ? `${API_URL}/v2/Tourism/Hotel?$top=${TOP_DATA}&$format=JSON&${FILTER_PIC}`  
@@ -78,8 +115,27 @@ const store = createStore({
       
 
       const responseData = await response.json()
+      // console.log(responseData)
 
-      context.commit('setHotel', responseData)
+      let datas = []
+
+      for(const res of responseData) {
+        let data = {
+          ID: res.HotelID,
+          Name: res.HotelName,
+          Address: res.Address,
+          Phone: res.Phone,
+          Picture: res.Picture,
+          Class: res.Class,
+          Position: res.Position,
+          OpenTime: res.OpenTime,
+          Description: res.Description
+        }
+
+        datas.push(data)
+      }
+
+      context.commit('setHotel', datas)
     },
     async setHot(context, type) {
       let API
@@ -101,29 +157,59 @@ const store = createStore({
       
       const responseData = await response.json()
 
-      context.commit('setHot', responseData)
-    },
-    async setPage(type) {
-      let API
+      let datas = []
+
       if(type == 'restaurant') {
-        API = `${API_URL}/v2/Tourism/Restaurant?$format=JSON&${FILTER_PIC}`
+        for(const res of responseData) {
+          let data = {
+            ID: res.RestaurantID,
+            Name: res.RestaurantName,
+            Address: res.Address,
+            Phone: res.Phone,
+            Picture: res.Picture,
+            Class: res.Class,
+            Position: res.Position,
+            OpenTime: res.OpenTime,
+            Description: res.Description
+          }
+  
+          datas.push(data)
+        }
       }else if(type == 'hotel') {
-        API = `${API_URL}/v2/Tourism/Hotel?&$format=JSON&${FILTER_PIC}`
+        for(const res of responseData) {
+          let data = {
+            ID: res.HotelID,
+            Name: res.HotelName,
+            Address: res.Address,
+            Phone: res.Phone,
+            Picture: res.Picture,
+            Class: res.Class,
+            Position: res.Position,
+            OpenTime: res.OpenTime,
+            Description: res.Description
+          }
+  
+          datas.push(data)
+        }
       }else {
-        API = `${API_URL}/v2/Tourism/ScenicSpot?$format=JSON&${FILTER_PIC}`
+        for(const res of responseData) {
+          let data = {
+            ID: res.ScenicSpotID,
+            Name: res.ScenicSpotName,
+            Address: res.Address,
+            Phone: res.Phone,
+            Picture: res.Picture,
+            Class: res.Class,
+            Position: res.Position,
+            OpenTime: res.OpenTime,
+            Description: res.Description
+          }
+  
+          datas.push(data)
+        }
       }
 
-      const response = await fetch(API, {
-        headers: getAuthorizationHeader()
-      })
-
-      if(!response.ok) {
-        alert('取得熱門資料失敗')
-      }
-      
-      const responseData = await response.json()
-
-      return responseData
+      context.commit('setHot', datas)
     }
   },
   getters: {
