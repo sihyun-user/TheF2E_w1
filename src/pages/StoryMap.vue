@@ -353,11 +353,12 @@ export default {
         console.log(error)
       }
       
+      isLoading.value = false
+
       resetCenter()
       initMap()
       setMarker()
       goSearch()
-      isLoading.value = false
     }
 
     getData()
